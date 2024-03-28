@@ -1,9 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>net.ow</groupId>
+
+  <groupId>net.ow.shared</groupId>
   <artifactId>shared-lib</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <name>Archetype - shared-lib</name>
-  <url>http://maven.apache.org</url>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Plugins -->
+    <spotless.version>2.41.1</spotless.version>
+
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless.version}</version>
+        <configuration>
+          <ratchetFrom>origin/dev</ratchetFrom>
+          <java>
+            <includes>
+              <include>src/main/java/**/*.java</include>
+              <include>src/test/java/**/*.java</include>
+            </includes>
+            <importOrder />
+            <removeUnusedImports />
+            <toggleOffOn/>
+            <trimTrailingWhitespace/>
+            <endWithNewline/>
+            <indent>
+              <tabs>true</tabs>
+              <spacesPerTab>4</spacesPerTab>
+            </indent>
+            <palantirJavaFormat/>
+          </java>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

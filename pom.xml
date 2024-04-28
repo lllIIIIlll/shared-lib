@@ -26,18 +26,109 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+    <!-- Spring Dependencies' version -->
+    <spring.webmvc.version>6.0.8</spring.webmvc.version>
+
+    <!-- Dependencies' version -->
+    <jackson.version>2.14.2</jackson.version>
+    <opentelementry.version>1.25.0</opentelementry.version>
+    <log4j-api.version>2.13.3</log4j-api.version>
+    <javax.validation.version>2.0.1.Final</javax.validation.version>
+    <javax.servlet.version>4.0.1</javax.servlet.version>
+
+    <!--tests-->
+    <junit-jupiter.version>5.10.2</junit-jupiter.version>
+
     <!-- Sonar -->
     <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 
     <!-- Plugins -->
     <spotless.version>2.41.1</spotless.version>
     <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-
-    <!--tests-->
-    <junit-jupiter.version>5.10.2</junit-jupiter.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <!-- Spring Dependencies -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${spring.webmvc.version}</version>
+      </dependency>
+
+      <!-- Jackson -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <!-- JavaX -->
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${javax.validation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${javax.servlet.version}</version>
+      </dependency>
+
+      <!-- Tracing -->
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+        <version>${opentelementry.version}</version>
+      </dependency>
+
+      <!-- log4j -->
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-to-slf4j</artifactId>
+        <version>${log4j-api.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless.version}</version>
+        <configuration>
+          <ratchetFrom>origin/dev</ratchetFrom>
+          <java>
+            <includes>
+              <include>src/main/java/**/*.java</include>
+              <include>src/test/java/**/*.java</include>
+            </includes>
+            <importOrder />
+            <removeUnusedImports />
+            <toggleOffOn/>
+            <trimTrailingWhitespace/>
+            <endWithNewline/>
+            <indent>
+              <tabs>true</tabs>
+              <spacesPerTab>4</spacesPerTab>
+            </indent>
+            <palantirJavaFormat/>
+          </java>
+        </configuration>
+      </plugin>
+    </plugins>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -47,31 +138,6 @@
           <configuration>
             <source>${maven.compiler.source}</source>
             <target>${maven.compiler.target}</target>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>com.diffplug.spotless</groupId>
-          <artifactId>spotless-maven-plugin</artifactId>
-          <version>${spotless.version}</version>
-          <configuration>
-            <ratchetFrom>origin/dev</ratchetFrom>
-            <java>
-              <includes>
-                <include>src/main/java/**/*.java</include>
-                <include>src/test/java/**/*.java</include>
-              </includes>
-              <importOrder />
-              <removeUnusedImports />
-              <toggleOffOn/>
-              <trimTrailingWhitespace/>
-              <endWithNewline/>
-              <indent>
-                <tabs>true</tabs>
-                <spacesPerTab>4</spacesPerTab>
-              </indent>
-              <palantirJavaFormat/>
-            </java>
           </configuration>
         </plugin>
       </plugins>

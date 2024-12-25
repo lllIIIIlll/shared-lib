@@ -1,6 +1,11 @@
 package net.ow.shared.errorutils.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
@@ -8,14 +13,10 @@ import java.io.Serializable;
  *
  * @see <a href="https://jsonapi.org/format/#errors>?Error Objects</a>
  */
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ErrorSource implements Serializable {
-    private ErrorSource(String pointer, String parameter, String header) {
-        this.pointer = pointer;
-        this.parameter = parameter;
-        this.header = header;
-    }
-
     /**
      * A <a href="https://tools.ietf.org/html/rfc6901>JSON Pointer</a> to the value in the request document that
      * caused the error [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].

@@ -11,21 +11,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import net.ow.shared.errorutils.dto.Error;
 import net.ow.shared.errorutils.dto.ErrorSource;
 import net.ow.shared.errorutils.errors.APIException;
 import net.ow.shared.errorutils.util.LocaleMessageSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+@Slf4j
 @Component
 public class ErrorMapper {
-    private static final Logger log = LoggerFactory.getLogger(ErrorMapper.class);
-
     public Error toError(APIException ex, LocaleMessageSource messages) {
         var code = ex.getError().getCode();
         var title = ex.getTitle(messages);
@@ -81,8 +79,7 @@ public class ErrorMapper {
     }
 
     public Error toError(RuntimeException ex) {
-        return toError(
-                ex, statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-shared-runtime", "Internal Error");
+        return toError(ex, statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-shared-runtime", "Internal Error");
     }
 
     public Error toError(Exception ex, String code, String title) {
@@ -90,17 +87,15 @@ public class ErrorMapper {
     }
 
     public Error[] toErrors(ConstraintViolationException ex) {
-        var code = statusToCode(HttpStatus.BAD_REQUEST);
+        var code = statusToCode(HttpStatus.BAD_REQUEST) + "-shared-constraint_violation";
+        var title = "Invalid Argument";
 
         return ex.getConstraintViolations().stream()
                 .map(violation -> {
                     var message = violation.getMessage();
                     logError(code, message);
 
-                    return Error.builder()
-                            .code(code)
-                            .title(violation.getRootBeanClass().getSimpleName())
-                            .detail(message)
+                    return errorBuilder(code, title, message)
                             .source(ErrorSource.withJsonPointer(
                                     violation.getPropertyPath().toString()))
                             .build();
@@ -109,17 +104,15 @@ public class ErrorMapper {
     }
 
     public Error[] toErrors(MethodArgumentNotValidException ex) {
-        var code = statusToCode(HttpStatus.BAD_REQUEST);
+        var code = statusToCode(HttpStatus.BAD_REQUEST) + "-shared-method_argument_not_valid";
+        var title = "Invalid Argument";
 
         return ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> {
                     var message = fieldError.getDefaultMessage();
                     logError(code, message);
 
-                    return Error.builder()
-                            .code(code)
-                            .title(fieldError.getField())
-                            .detail(message)
+                    return errorBuilder(code, title, message)
                             .source(ErrorSource.withParameter(fieldError.getField()))
                             .build();
                 })
@@ -168,9 +161,10 @@ public class ErrorMapper {
                         jsonValue -> {
                             for (int i = 0; i < constants.length; i++) {
                                 try {
-                                    values[i] = (String) jsonValue.invoke(constants[1]);
+                                    values[i] = (String) jsonValue.invoke(constants[i]);
                                 } catch (Exception ex) {
                                     log.warn("Failed to convert {} to json value", constants[i], ex);
+                                    values[i] = constants[i].toString();
                                 }
                             }
                         },
@@ -194,7 +188,7 @@ public class ErrorMapper {
      *  | where operation_Id == "x"
      * </pre>
      */
-    private Map<String, Serializable> getMonitoringMetaData() {
+    public Map<String, Serializable> getMonitoringMetaData() {
         try {
             var context = Span.current().getSpanContext();
             var traceId = context.getTraceId();
@@ -204,7 +198,6 @@ public class ErrorMapper {
 
             var spanId = context.getSpanId();
 
-            log.info("operation_Id: {}, operationParent_Id: {}", traceId, spanId);
             return Map.of("operation_Id", traceId, "operationParent_Id", spanId);
         } catch (Throwable e) {
             log.info("Failed to add monitoring metadata", e);

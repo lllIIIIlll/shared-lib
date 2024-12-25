@@ -2,8 +2,10 @@ package net.ow.shared.errorutils.model;
 
 import java.io.Serial;
 import java.io.Serializable;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ErrorProperties implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

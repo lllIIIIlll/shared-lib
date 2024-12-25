@@ -80,14 +80,9 @@ public class ErrorMapper {
         return toError(ex, statusToCode(status) + codeSuffix, title);
     }
 
-    public Error toError(Exception ex) {
-        return toError(
-                ex, "movie-theatre-" + statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-exception", "Internal Error");
-    }
-
     public Error toError(RuntimeException ex) {
         return toError(
-                ex, "movie-theatre-" + statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-runtime", "Internal Error");
+                ex, statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-shared-runtime", "Internal Error");
     }
 
     public Error toError(Exception ex, String code, String title) {
@@ -147,11 +142,11 @@ public class ErrorMapper {
     }
 
     private void logError(String code, String message) {
-        log.info("Error ({}): {}", code, message);
+        log.error("Error ({}): {}", code, message);
     }
 
     private void logError(String id, String code, String message) {
-        log.info("Error #{} ({}): {}", id, code, message);
+        log.error("Error #{} ({}): {}", id, code, message);
     }
 
     protected String generateId() {

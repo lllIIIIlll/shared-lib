@@ -1,12 +1,10 @@
 package net.ow.shared.errorutils.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
-
-import java.io.Serializable;
 
 /**
  * An object containing reference to primary source of the error.

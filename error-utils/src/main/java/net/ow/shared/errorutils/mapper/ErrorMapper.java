@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import net.ow.shared.errorutils.dto.Error;
 import net.ow.shared.errorutils.dto.ErrorSource;
@@ -20,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import javax.validation.ConstraintViolationException;
 
 @Slf4j
 @Component
@@ -97,11 +95,7 @@ public class ErrorMapper {
                     var message = violation.getMessage();
                     logError(code, message);
 
-                    return Error.builder()
-                            .id(generateId())
-                            .code(code)
-                            .title(title)
-                            .detail(message)
+                    return errorBuilder(code, title, message)
                             .source(ErrorSource.withJsonPointer(
                                     violation.getPropertyPath().toString()))
                             .build();
@@ -118,11 +112,7 @@ public class ErrorMapper {
                     var message = fieldError.getDefaultMessage();
                     logError(code, message);
 
-                    return Error.builder()
-                            .id(generateId())
-                            .code(code)
-                            .title(title)
-                            .detail(message)
+                    return errorBuilder(code, title, message)
                             .source(ErrorSource.withParameter(fieldError.getField()))
                             .build();
                 })

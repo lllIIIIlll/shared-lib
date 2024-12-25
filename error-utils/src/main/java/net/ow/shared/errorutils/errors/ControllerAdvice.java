@@ -4,7 +4,6 @@ import java.nio.file.AccessDeniedException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
-
 import net.ow.shared.errorutils.dto.APIResponse;
 import net.ow.shared.errorutils.dto.Error;
 import net.ow.shared.errorutils.mapper.ErrorMapper;

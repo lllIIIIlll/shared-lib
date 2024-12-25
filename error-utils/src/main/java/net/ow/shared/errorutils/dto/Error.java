@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * Error objects provide additional information about problems encountered while performing an operation.

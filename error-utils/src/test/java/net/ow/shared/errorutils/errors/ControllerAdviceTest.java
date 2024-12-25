@@ -1,19 +1,17 @@
 package net.ow.shared.errorutils.errors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-
-import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Set;
-
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
 import lombok.SneakyThrows;
 import net.ow.shared.errorutils.fixture.TestMessageSource;
 import net.ow.shared.errorutils.fixture.TestServiceError;
@@ -35,18 +33,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
-
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class ControllerAdviceTest {
-    @InjectMocks private ControllerAdvice controllerAdvice;
+    @InjectMocks
+    private ControllerAdvice controllerAdvice;
 
-    @Mock ConstraintViolation<Object> constraintViolation1;
+    @Mock
+    ConstraintViolation<Object> constraintViolation1;
 
-    @Mock ConstraintViolation<Object> constraintViolation2;
+    @Mock
+    ConstraintViolation<Object> constraintViolation2;
 
     @BeforeEach
     void initAll() {
@@ -64,26 +61,27 @@ class ControllerAdviceTest {
         // When
         var response = controllerAdvice.onAPIException(ex);
 
-
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-test-one",
-                    "title": "Error for Test One",
-                    "detail": "Created on 20 October"
-                  } ]
-                }""", response.getBody());
-
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "400-test-one",
+					"title": "Error for Test One",
+					"detail": "Created on 20 October"
+				} ]
+				}""",
+                response.getBody());
     }
 
     @SneakyThrows
     @Test
     void testOnHttpMessageNotReadableException() {
         // Given
-        var ex = new HttpMessageNotReadableException("not readable message",
+        var ex = new HttpMessageNotReadableException(
+                "not readable message",
                 new RuntimeException("forced RuntimeException for the test"),
                 new MockHttpInputMessage("httpInputMessage".getBytes()));
 
@@ -92,16 +90,17 @@ class ControllerAdviceTest {
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-not_readable",
-                    "title": "Invalid Input",
-                    "detail": "forced RuntimeException for the test"
-                  } ]
-                }""", response.getBody());
-
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-not_readable",
+					"title": "Invalid Input",
+					"detail": "forced RuntimeException for the test"
+				} ]
+				}""",
+                response.getBody());
     }
 
     @SneakyThrows
@@ -110,28 +109,28 @@ class ControllerAdviceTest {
         // Given
         var invalidFormat = new InvalidFormatException(null, "You shall not parse!", "Smaug", EnumWithJsonValue.class);
         invalidFormat.prependPath(this, "testField");
-        var ex = new HttpMessageNotReadableException("not readable message",
-                invalidFormat,
-                new MockHttpInputMessage("httpInputMessage".getBytes()));
+        var ex = new HttpMessageNotReadableException(
+                "not readable message", invalidFormat, new MockHttpInputMessage("httpInputMessage".getBytes()));
 
         // When
         var response = controllerAdvice.onHttpMessageNotReadableException(ex);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-not_readable",
-                    "title": "Invalid Input",
-                    "detail": "Invalid value for testField. Expected one of [foo, bar] but was: Smaug",
-                    "source": {
-                      "pointer": "/testField"
-                    }
-                  } ]
-                }""", response.getBody());
-
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-not_readable",
+					"title": "Invalid Input",
+					"detail": "Invalid value for testField. Expected one of [foo, bar] but was: Smaug",
+					"source": {
+					"pointer": "/testField"
+					}
+				} ]
+				}""",
+                response.getBody());
     }
 
     @SneakyThrows
@@ -140,28 +139,28 @@ class ControllerAdviceTest {
         // Given
         var invalidFormat = new InvalidFormatException(null, "You shall not parse!", "today", Date.class);
         invalidFormat.prependPath(this, "testField");
-        var ex = new HttpMessageNotReadableException("not readable message",
-                invalidFormat,
-                new MockHttpInputMessage("httpInputMessage".getBytes()));
+        var ex = new HttpMessageNotReadableException(
+                "not readable message", invalidFormat, new MockHttpInputMessage("httpInputMessage".getBytes()));
 
         // When
         var response = controllerAdvice.onHttpMessageNotReadableException(ex);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-not_readable",
-                    "title": "Invalid Input",
-                    "detail": "You shall not parse!",
-                    "source": {
-                      "pointer": "/testField"
-                    }
-                  } ]
-                }""", response.getBody());
-
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-not_readable",
+					"title": "Invalid Input",
+					"detail": "You shall not parse!",
+					"source": {
+					"pointer": "/testField"
+					}
+				} ]
+				}""",
+                response.getBody());
     }
 
     @SneakyThrows
@@ -175,16 +174,17 @@ class ControllerAdviceTest {
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "500-shared-runtime",
-                    "title": "Internal Error",
-                    "detail": "test message"
-                  } ]
-                }""", response.getBody());
-
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "500-shared-runtime",
+					"title": "Internal Error",
+					"detail": "test message"
+				} ]
+				}""",
+                response.getBody());
     }
 
     @SneakyThrows
@@ -193,7 +193,8 @@ class ControllerAdviceTest {
         // Given
         var bindingResult = mock(BindingResult.class);
         when(bindingResult.getFieldErrors())
-                .thenReturn(List.of(new FieldError("saveRequest", "clientId", "Client Id is missing"),
+                .thenReturn(List.of(
+                        new FieldError("saveRequest", "clientId", "Client Id is missing"),
                         new FieldError("saveRequest", "description", "Description is too long")));
         var methodParameter = mock(MethodParameter.class);
 
@@ -204,28 +205,29 @@ class ControllerAdviceTest {
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-method_argument_not_valid",
-                    "title": "Invalid Argument",
-                    "detail": "Client Id is missing",
-                    "source": {
-                      "parameter": "clientId"
-                     }
-                  },
-                   {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-method_argument_not_valid",
-                    "title": "Invalid Argument",
-                    "detail": "Description is too long",
-                    "source": {
-                      "parameter": "description"
-                     }
-                  }]
-                }""", response.getBody());
-
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-method_argument_not_valid",
+					"title": "Invalid Argument",
+					"detail": "Client Id is missing",
+					"source": {
+					"parameter": "clientId"
+					}
+				},
+				{
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-method_argument_not_valid",
+					"title": "Invalid Argument",
+					"detail": "Description is too long",
+					"source": {
+					"parameter": "description"
+					}
+				}]
+				}""",
+                response.getBody());
     }
 
     @SneakyThrows
@@ -241,34 +243,37 @@ class ControllerAdviceTest {
         when(path2.toString()).thenReturn("/name");
         when(constraintViolation2.getPropertyPath()).thenReturn(path2);
 
-        var exception = new ConstraintViolationException("Validation failed", Set.of(constraintViolation1, constraintViolation2));
+        var exception = new ConstraintViolationException(
+                "Validation failed", Set.of(constraintViolation1, constraintViolation2));
 
         // When
         var response = controllerAdvice.onConstraintViolationException(exception);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ErrorMapperTest.assertJson("""
-                {
-                  "errors": [ {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-constraint_violation",
-                    "title": "Invalid Argument",
-                    "detail": "Age must be positive",
-                    "source": {
-                      "pointer": "/age"
-                     }
-                  },
-                  {
-                    "id": "1234-5678-1234-5678",
-                    "code": "400-shared-constraint_violation",
-                    "title": "Invalid Argument",
-                    "detail": "Name must not be empty",
-                    "source": {
-                      "pointer": "/name"
-                    }
-                  }]
-                }""", response.getBody());
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-constraint_violation",
+					"title": "Invalid Argument",
+					"detail": "Age must be positive",
+					"source": {
+					"pointer": "/age"
+					}
+				},
+				{
+					"id": "1234-5678-1234-5678",
+					"code": "400-shared-constraint_violation",
+					"title": "Invalid Argument",
+					"detail": "Name must not be empty",
+					"source": {
+					"pointer": "/name"
+					}
+				}]
+				}""",
+                response.getBody());
     }
 
     public enum EnumWithJsonValue {

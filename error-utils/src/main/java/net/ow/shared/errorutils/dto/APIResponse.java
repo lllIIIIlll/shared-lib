@@ -1,10 +1,8 @@
 package net.ow.shared.errorutils.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.util.Map;
+import lombok.Getter;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)

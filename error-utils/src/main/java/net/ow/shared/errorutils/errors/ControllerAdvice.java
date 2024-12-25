@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Component
 @RestControllerAdvice
 public class ControllerAdvice {
-    private static final Logger log = LoggerFactory.getLogger(ErrorMapper.class);
+    private static final Logger log = LoggerFactory.getLogger(ControllerAdvice.class);
 
     private final LocaleMessageSource messages;
 
@@ -39,43 +39,38 @@ public class ControllerAdvice {
      */
     @ExceptionHandler({APIException.class})
     public ResponseEntity<APIResponse> handleAPIException(APIException e) {
-        if (e.getError().getStatus().is5xxServerError()) {
-            log.error("Application threw APIException", e);
-        } else {
-            log.info("Application threw APIException", e);
-        }
-
+        log.error("Application threw APIException", e);
         return toResponseEntity(e.getError().getStatus(), errorMapper.toError(e, messages));
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<APIResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        log.info("HTTP message not readable", e);
+        log.error("HTTP message not readable", e);
         var status = HttpStatus.BAD_REQUEST;
-        return toResponseEntity(status, errorMapper.toError(e, "movie-theatre-400-not-readable"));
+        return toResponseEntity(status, errorMapper.toError(e, "400-shared-not_readable"));
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     public ResponseEntity<APIResponse> onAuthenticationNotFound(
             HttpServletRequest request, AuthenticationCredentialsNotFoundException e) {
-        log.info("Spring Security threw AuthenticationCredentialsNotFoundException: {}", e.getMessage());
+        log.error("Spring Security threw AuthenticationCredentialsNotFoundException: {}", e.getMessage());
 
         var auth = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (null != auth && auth.length() > 20) {
             auth = auth.substring(0, 20) + "...";
         }
 
-        log.info("Auth header: {}", auth);
-        log.info(
+        log.error("Auth header: {}", auth);
+        log.error(
                 "Unauthorised request for {} {} from {}",
                 request.getMethod(),
                 request.getRequestURI(),
                 request.getRemoteAddr());
 
         var status = HttpStatus.UNAUTHORIZED;
-        return toResponseEntity(status, errorMapper.toError(e, "movie-theatre-" + status + "-auth", "Unauthorised"));
+        return toResponseEntity(status, errorMapper.toError(e, status, "shared-auth", "Unauthorised"));
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -87,25 +82,17 @@ public class ControllerAdvice {
                 request.getMethod(),
                 request.getPathInfo(),
                 request.getRemoteAddr());
-        // TODO:
-        //        try {
-        //            var user = // get user using token helper
-        //            log.warn("User '{}' denied access to {} {} from {}", user.getUserId, request.getMethod(),
+        // TODO: Log user info
+        //        log.warn("User '{}' denied access to {} {} from {}",user.getUserId(), request.getMethod(),
         // request.getPathInfo(), request.getRemoteAddr());
-        //        } catch (Exception ex) {
-        //            log.warn("Unidentified user denied access to {} {} from {}", request.getMethod(),
-        // request.getPathInfo(), request.getRemoteAddr());
-        //        }
-
         var status = HttpStatus.FORBIDDEN;
-        return toResponseEntity(
-                status, errorMapper.toError(e, status, "-movie-theatre-access_denied", "Access Denied"));
+        return toResponseEntity(status, errorMapper.toError(e, status, "-shared-access_denied", "Access Denied"));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<APIResponse> handleConstraintViolationException(ConstraintViolationException e) {
-        log.info("Application threw ConstraintViolationException", e);
+        log.error("Application threw ConstraintViolationException", e);
         var status = HttpStatus.BAD_REQUEST;
         return toResponseEntity(status, errorMapper.toError(e));
     }
@@ -114,13 +101,6 @@ public class ControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<APIResponse> onRuntimeException(RuntimeException e) {
         log.error("Application threw RuntimeException", e);
-        return toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, errorMapper.toError(e));
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<APIResponse> onException(Exception e) {
-        log.error("Application threw Exception", e);
         return toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, errorMapper.toError(e));
     }
 

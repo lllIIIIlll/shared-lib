@@ -2,28 +2,26 @@ package net.ow.shared.errorutils.errors;
 
 import java.io.Serializable;
 import java.util.Map;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.With;
 import net.ow.shared.errorutils.dto.ErrorSource;
 import net.ow.shared.errorutils.util.LocaleMessageSource;
 
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class APIException extends RuntimeException {
     private final ServiceError error;
 
     private final Serializable[] messageParams;
 
+    @With
     private ErrorSource source;
 
+    @With
     private Map<String, Serializable> meta;
-
-    private APIException(
-            final ServiceError error,
-            final Serializable[] messageParams,
-            final ErrorSource source,
-            final Map<String, Serializable> meta) {
-        this.error = error;
-        this.messageParams = messageParams;
-        this.source = source;
-        this.meta = meta;
-    }
 
     public APIException(ServiceError error) {
         this.error = error;
@@ -47,18 +45,6 @@ public class APIException extends RuntimeException {
         this.messageParams = messageParams;
     }
 
-    public ServiceError getError() {
-        return error;
-    }
-
-    public Map<String, Serializable> getMeta() {
-        return meta;
-    }
-
-    public ErrorSource getSource() {
-        return source;
-    }
-
     public String getTitle(LocaleMessageSource messageSource) {
         return messageSource.getMessage(error.getTitle());
     }
@@ -69,13 +55,5 @@ public class APIException extends RuntimeException {
 
     public String getMessage(LocaleMessageSource messageSource) {
         return messageSource.getMessage(error.getMessage(), (Object[]) messageParams);
-    }
-
-    public APIException withSource(final ErrorSource source) {
-        return this.source == source ? this : new APIException(this.error, this.messageParams, source, this.meta);
-    }
-
-    public APIException withMeta(final Map<String, Serializable> meta) {
-        return this.meta == meta ? this : new APIException(this.error, this.messageParams, this.source, meta);
     }
 }

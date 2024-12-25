@@ -37,16 +37,6 @@ public class Error {
      */
     private Map<String, Serializable> meta;
 
-    private Error(
-            String id, String code, String title, String detail, ErrorSource source, Map<String, Serializable> meta) {
-        this.id = id;
-        this.code = code;
-        this.title = title;
-        this.detail = detail;
-        this.source = source;
-        this.meta = meta;
-    }
-
     public static class ErrorBuilder {
         public ErrorBuilder meta(Map<String, Serializable> data) {
             if (null != data && !data.isEmpty()) {

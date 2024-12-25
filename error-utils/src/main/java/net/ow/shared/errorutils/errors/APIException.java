@@ -2,7 +2,6 @@ package net.ow.shared.errorutils.errors;
 
 import java.io.Serializable;
 import java.util.Map;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

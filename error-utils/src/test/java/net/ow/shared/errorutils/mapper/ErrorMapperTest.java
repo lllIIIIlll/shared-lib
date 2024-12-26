@@ -28,11 +28,11 @@ public class ErrorMapperTest {
     void shouldConvertApiExceptionToJson() {
         // Given
         var ex = new APIException(TestServiceError.TEST_ONE, 20, "October");
-        var mapper = new TestableErrorMapper();
+        var errorMapper = new TestableErrorMapper();
         var messageSource = new TestMessageSource();
 
         // When
-        var error = mapper.toError(ex, messageSource);
+        var error = errorMapper.toError(ex, messageSource);
 
         // Then
         assertJson(
@@ -49,7 +49,7 @@ public class ErrorMapperTest {
     @Test
     @SuppressWarnings("unchecked")
     void shouldAddMonitoringData() {
-        var mapper = new TestableErrorMapper();
+        var errorMapper = new TestableErrorMapper();
         var spanId = "1234abcd1234abcd";
         var traceId = spanId + spanId;
 
@@ -62,7 +62,7 @@ public class ErrorMapperTest {
         // When
         var meta =
                 (Map<String, Serializable>)
-                        ReflectionTestUtils.invokeMethod(mapper, "getMonitoringMetaData");
+                        ReflectionTestUtils.invokeMethod(errorMapper, "getMonitoringMetaData");
 
         // Then
         assertEquals(traceId, meta.get("operation_Id"));

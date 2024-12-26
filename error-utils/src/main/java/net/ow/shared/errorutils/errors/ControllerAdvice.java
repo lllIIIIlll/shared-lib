@@ -29,9 +29,7 @@ public class ControllerAdvice {
 
     private final ErrorMapper errorMapper;
 
-    /**
-     * Handles application-specific exceptions
-     */
+    /** Handles application-specific exceptions */
     @ExceptionHandler({APIException.class})
     public ResponseEntity<APIResponse> onAPIException(APIException e) {
         log.error("Application threw APIException", e);
@@ -40,7 +38,8 @@ public class ControllerAdvice {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<APIResponse> onHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public ResponseEntity<APIResponse> onHttpMessageNotReadableException(
+            HttpMessageNotReadableException e) {
         log.error("HTTP message not readable", e);
         var status = HttpStatus.BAD_REQUEST;
         return toResponseEntity(status, errorMapper.toError(e, "400-shared-not_readable"));
@@ -50,7 +49,9 @@ public class ControllerAdvice {
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     public ResponseEntity<APIResponse> onAuthenticationNotFound(
             HttpServletRequest request, AuthenticationCredentialsNotFoundException e) {
-        log.error("Spring Security threw AuthenticationCredentialsNotFoundException: {}", e.getMessage());
+        log.error(
+                "Spring Security threw AuthenticationCredentialsNotFoundException: {}",
+                e.getMessage());
         // TODO: Log user info
         log.error(
                 "Unauthorised request for {} {} from {}",
@@ -59,12 +60,14 @@ public class ControllerAdvice {
                 request.getRemoteAddr());
 
         var status = HttpStatus.UNAUTHORIZED;
-        return toResponseEntity(status, errorMapper.toError(e, status, "shared-auth", "Unauthorised"));
+        return toResponseEntity(
+                status, errorMapper.toError(e, status, "shared-auth", "Unauthorised"));
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({AccessDeniedException.class, AuthenticationException.class})
-    public ResponseEntity<APIResponse> onDataAccessException(HttpServletRequest request, RuntimeException e) {
+    public ResponseEntity<APIResponse> onDataAccessException(
+            HttpServletRequest request, RuntimeException e) {
         log.warn("Spring Security threw {}: {}", e.getClass().getSimpleName(), e.getMessage());
         // TODO: Log user info
         log.warn(
@@ -73,12 +76,14 @@ public class ControllerAdvice {
                 request.getPathInfo(),
                 request.getRemoteAddr());
         var status = HttpStatus.FORBIDDEN;
-        return toResponseEntity(status, errorMapper.toError(e, status, "-shared-access_denied", "Access Denied"));
+        return toResponseEntity(
+                status, errorMapper.toError(e, status, "-shared-access_denied", "Access Denied"));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<APIResponse> onConstraintViolationException(ConstraintViolationException e) {
+    public ResponseEntity<APIResponse> onConstraintViolationException(
+            ConstraintViolationException e) {
         log.error("Application threw ConstraintViolationException", e);
         var status = HttpStatus.BAD_REQUEST;
         return toResponseEntity(status, errorMapper.toErrors(e));
@@ -86,7 +91,8 @@ public class ControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<APIResponse> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ResponseEntity<APIResponse> onMethodArgumentNotValidException(
+            MethodArgumentNotValidException e) {
         log.error("Application threw MethodArgumentNotValidException", e);
         var status = HttpStatus.BAD_REQUEST;
         return toResponseEntity(status, errorMapper.toErrors(e));

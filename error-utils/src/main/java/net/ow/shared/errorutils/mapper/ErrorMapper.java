@@ -30,10 +30,7 @@ public class ErrorMapper {
         var message = ex.getMessage(messages);
         var source = ex.getSource();
 
-        return errorBuilder(code, title, message)
-                .source(source)
-                .meta(ex.getMeta())
-                .build();
+        return errorBuilder(code, title, message).source(source).meta(ex.getMeta()).build();
     }
 
     public Error toError(HttpMessageNotReadableException ex, String code) {
@@ -51,10 +48,11 @@ public class ErrorMapper {
 
             if (cause instanceof InvalidFormatException invalidFormat) {
                 message = formatErrorMessageForInvalidEnum(invalidFormat);
-                pointer = "/"
-                        + invalidFormat.getPath().stream()
-                                .map(JsonMappingException.Reference::getFieldName)
-                                .collect(Collectors.joining("/"));
+                pointer =
+                        "/"
+                                + invalidFormat.getPath().stream()
+                                        .map(JsonMappingException.Reference::getFieldName)
+                                        .collect(Collectors.joining("/"));
             }
 
             if (message == null) {
@@ -79,7 +77,10 @@ public class ErrorMapper {
     }
 
     public Error toError(RuntimeException ex) {
-        return toError(ex, statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-shared-runtime", "Internal Error");
+        return toError(
+                ex,
+                statusToCode(HttpStatus.INTERNAL_SERVER_ERROR) + "-shared-runtime",
+                "Internal Error");
     }
 
     public Error toError(Exception ex, String code, String title) {
@@ -91,15 +92,17 @@ public class ErrorMapper {
         var title = "Invalid Argument";
 
         return ex.getConstraintViolations().stream()
-                .map(violation -> {
-                    var message = violation.getMessage();
-                    logError(code, message);
+                .map(
+                        violation -> {
+                            var message = violation.getMessage();
+                            logError(code, message);
 
-                    return errorBuilder(code, title, message)
-                            .source(ErrorSource.withJsonPointer(
-                                    violation.getPropertyPath().toString()))
-                            .build();
-                })
+                            return errorBuilder(code, title, message)
+                                    .source(
+                                            ErrorSource.withJsonPointer(
+                                                    violation.getPropertyPath().toString()))
+                                    .build();
+                        })
                 .toArray(Error[]::new);
     }
 
@@ -108,14 +111,15 @@ public class ErrorMapper {
         var title = "Invalid Argument";
 
         return ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> {
-                    var message = fieldError.getDefaultMessage();
-                    logError(code, message);
+                .map(
+                        fieldError -> {
+                            var message = fieldError.getDefaultMessage();
+                            logError(code, message);
 
-                    return errorBuilder(code, title, message)
-                            .source(ErrorSource.withParameter(fieldError.getField()))
-                            .build();
-                })
+                            return errorBuilder(code, title, message)
+                                    .source(ErrorSource.withParameter(fieldError.getField()))
+                                    .build();
+                        })
                 .toArray(Error[]::new);
     }
 
@@ -163,7 +167,8 @@ public class ErrorMapper {
                                 try {
                                     values[i] = (String) jsonValue.invoke(constants[i]);
                                 } catch (Exception ex) {
-                                    log.warn("Failed to convert {} to json value", constants[i], ex);
+                                    log.warn(
+                                            "Failed to convert {} to json value", constants[i], ex);
                                     values[i] = constants[i].toString();
                                 }
                             }
@@ -176,7 +181,9 @@ public class ErrorMapper {
 
         return String.format(
                 "Invalid value for %s. Expected one of %s but was: %s",
-                invalidFormat.getPath().get(0).getFieldName(), Arrays.toString(values), invalidFormat.getValue());
+                invalidFormat.getPath().get(0).getFieldName(),
+                Arrays.toString(values),
+                invalidFormat.getValue());
     }
 
     /**
@@ -192,7 +199,9 @@ public class ErrorMapper {
         try {
             var context = Span.current().getSpanContext();
             var traceId = context.getTraceId();
-            if (null == traceId || traceId.isEmpty() || traceId.equals("00000000000000000000000000000000")) {
+            if (null == traceId
+                    || traceId.isEmpty()
+                    || traceId.equals("00000000000000000000000000000000")) {
                 return Collections.emptyMap();
             }
 

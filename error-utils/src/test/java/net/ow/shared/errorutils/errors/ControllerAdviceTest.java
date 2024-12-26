@@ -36,14 +36,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class ControllerAdviceTest {
-    @InjectMocks
-    private ControllerAdvice controllerAdvice;
+    @InjectMocks private ControllerAdvice controllerAdvice;
 
-    @Mock
-    ConstraintViolation<Object> constraintViolation1;
+    @Mock ConstraintViolation<Object> constraintViolation1;
 
-    @Mock
-    ConstraintViolation<Object> constraintViolation2;
+    @Mock ConstraintViolation<Object> constraintViolation2;
 
     @BeforeEach
     void initAll() {
@@ -80,10 +77,11 @@ class ControllerAdviceTest {
     @Test
     void testOnHttpMessageNotReadableException() {
         // Given
-        var ex = new HttpMessageNotReadableException(
-                "not readable message",
-                new RuntimeException("forced RuntimeException for the test"),
-                new MockHttpInputMessage("httpInputMessage".getBytes()));
+        var ex =
+                new HttpMessageNotReadableException(
+                        "not readable message",
+                        new RuntimeException("forced RuntimeException for the test"),
+                        new MockHttpInputMessage("httpInputMessage".getBytes()));
 
         // When
         var response = controllerAdvice.onHttpMessageNotReadableException(ex);
@@ -107,10 +105,15 @@ class ControllerAdviceTest {
     @Test
     void testInvalidFormatExceptionWithJsonValue() {
         // Given
-        var invalidFormat = new InvalidFormatException(null, "You shall not parse!", "Smaug", EnumWithJsonValue.class);
+        var invalidFormat =
+                new InvalidFormatException(
+                        null, "You shall not parse!", "Smaug", EnumWithJsonValue.class);
         invalidFormat.prependPath(this, "testField");
-        var ex = new HttpMessageNotReadableException(
-                "not readable message", invalidFormat, new MockHttpInputMessage("httpInputMessage".getBytes()));
+        var ex =
+                new HttpMessageNotReadableException(
+                        "not readable message",
+                        invalidFormat,
+                        new MockHttpInputMessage("httpInputMessage".getBytes()));
 
         // When
         var response = controllerAdvice.onHttpMessageNotReadableException(ex);
@@ -137,10 +140,14 @@ class ControllerAdviceTest {
     @Test
     void testInvalidFormatExceptionWithNonEnum() {
         // Given
-        var invalidFormat = new InvalidFormatException(null, "You shall not parse!", "today", Date.class);
+        var invalidFormat =
+                new InvalidFormatException(null, "You shall not parse!", "today", Date.class);
         invalidFormat.prependPath(this, "testField");
-        var ex = new HttpMessageNotReadableException(
-                "not readable message", invalidFormat, new MockHttpInputMessage("httpInputMessage".getBytes()));
+        var ex =
+                new HttpMessageNotReadableException(
+                        "not readable message",
+                        invalidFormat,
+                        new MockHttpInputMessage("httpInputMessage".getBytes()));
 
         // When
         var response = controllerAdvice.onHttpMessageNotReadableException(ex);
@@ -193,9 +200,11 @@ class ControllerAdviceTest {
         // Given
         var bindingResult = mock(BindingResult.class);
         when(bindingResult.getFieldErrors())
-                .thenReturn(List.of(
-                        new FieldError("saveRequest", "clientId", "Client Id is missing"),
-                        new FieldError("saveRequest", "description", "Description is too long")));
+                .thenReturn(
+                        List.of(
+                                new FieldError("saveRequest", "clientId", "Client Id is missing"),
+                                new FieldError(
+                                        "saveRequest", "description", "Description is too long")));
         var methodParameter = mock(MethodParameter.class);
 
         var exception = new MethodArgumentNotValidException(methodParameter, bindingResult);
@@ -243,8 +252,9 @@ class ControllerAdviceTest {
         when(path2.toString()).thenReturn("/name");
         when(constraintViolation2.getPropertyPath()).thenReturn(path2);
 
-        var exception = new ConstraintViolationException(
-                "Validation failed", Set.of(constraintViolation1, constraintViolation2));
+        var exception =
+                new ConstraintViolationException(
+                        "Validation failed", Set.of(constraintViolation1, constraintViolation2));
 
         // When
         var response = controllerAdvice.onConstraintViolationException(exception);

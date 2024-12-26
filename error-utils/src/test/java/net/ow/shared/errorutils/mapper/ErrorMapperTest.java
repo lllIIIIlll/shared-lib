@@ -53,12 +53,16 @@ public class ErrorMapperTest {
         var spanId = "1234abcd1234abcd";
         var traceId = spanId + spanId;
 
-        var spanContext = SpanContext.create(traceId, spanId, TraceFlags.getDefault(), TraceState.getDefault());
+        var spanContext =
+                SpanContext.create(
+                        traceId, spanId, TraceFlags.getDefault(), TraceState.getDefault());
         var span = Span.wrap(spanContext);
         span.makeCurrent();
 
         // When
-        var meta = (Map<String, Serializable>) ReflectionTestUtils.invokeMethod(mapper, "getMonitoringMetaData");
+        var meta =
+                (Map<String, Serializable>)
+                        ReflectionTestUtils.invokeMethod(mapper, "getMonitoringMetaData");
 
         // Then
         assertEquals(traceId, meta.get("operation_Id"));
@@ -67,11 +71,12 @@ public class ErrorMapperTest {
 
     @Test
     void shouldAddMetaData() {
-        var error = Error.builder()
-                .id("error-1")
-                .meta(Map.of("foo", "bar"))
-                .meta(Map.of("ham", "spam"))
-                .build();
+        var error =
+                Error.builder()
+                        .id("error-1")
+                        .meta(Map.of("foo", "bar"))
+                        .meta(Map.of("ham", "spam"))
+                        .build();
 
         assertEquals("error-1", error.getId());
         assertEquals("bar", error.getMeta().get("foo"));
@@ -80,10 +85,11 @@ public class ErrorMapperTest {
 
     @SneakyThrows
     public static void assertJson(String expected, Object data) {
-        var json = mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(data)
-                .replaceAll("\" :", "\":")
-                .replaceAll(System.lineSeparator(), "\n");
+        var json =
+                mapper.writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(data)
+                        .replaceAll("\" :", "\":")
+                        .replaceAll(System.lineSeparator(), "\n");
         JSONAssert.assertEquals(expected, json, JSONCompareMode.LENIENT);
     }
 }

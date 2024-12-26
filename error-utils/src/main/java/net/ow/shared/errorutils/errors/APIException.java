@@ -16,11 +16,9 @@ public class APIException extends RuntimeException {
 
     private final Serializable[] messageParams;
 
-    @With
-    private ErrorSource source;
+    @With private ErrorSource source;
 
-    @With
-    private Map<String, Serializable> meta;
+    @With private Map<String, Serializable> meta;
 
     public APIException(ServiceError error) {
         this.error = error;

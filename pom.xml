@@ -12,6 +12,7 @@
 
   <modules>
     <module>error-utils</module>
+    <module>jacoco-aggregator</module>
   </modules>
 
   <properties>
@@ -25,27 +26,37 @@
 
     <!-- Dependencies' version -->
     <jackson.version>2.14.2</jackson.version>
-    <opentelementry.version>1.25.0</opentelementry.version>
+
+    <!-- Logging -->
     <log4j-api.version>2.13.3</log4j-api.version>
+
+    <!-- Validation -->
     <javax.validation.version>2.0.1.Final</javax.validation.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
 
+    <!-- Tracing -->
+    <opentelementry.version>1.25.0</opentelementry.version>
+
     <!-- Sonar -->
     <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/jacoco-aggregator/target/site/jacoco-aggregate/jacoco.xml/</sonar.coverage.jacoco.xmlReportPaths>
 
     <!-- Lombok -->
     <lombok.version>1.18.30</lombok.version>
-
-    <!-- Plugins -->
-    <spotless.version>2.41.1</spotless.version>
-    <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
     <org.projectlombok.version>1.18.20</org.projectlombok.version>
 
-    <!--tests-->
+    <!-- Styling -->
+    <spotless.version>2.41.1</spotless.version>
+
+    <!-- Testing -->
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
     <mockito.version>5.10.0</mockito.version>
     <spring-test.version>6.1.3</spring-test.version>
-    <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
+    <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
+    <jacoco.version>0.8.8</jacoco.version>
+
+    <!-- Modules -->
+    <error-utils.version>0.1.0-SNAPSHOT</error-utils.version>
   </properties>
 
   <dependencies>
@@ -67,6 +78,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Modules -->
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>error-utils</artifactId>
+        <version>${error-utils.version}</version>
+      </dependency>
+
       <!-- Spring Dependencies -->
       <dependency>
         <groupId>org.springframework</groupId>
@@ -187,6 +205,11 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
@@ -214,9 +237,32 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <includes>
+                <include>**/*Test.java</include>
+              </includes>
+            </configuration>
             <dependencies>
               <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -242,6 +288,24 @@
       </activation>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
@@ -17,6 +18,7 @@ import net.ow.shared.errorutils.fixture.TestMessageSource;
 import net.ow.shared.errorutils.fixture.TestServiceError;
 import net.ow.shared.errorutils.fixture.TestableErrorMapper;
 import net.ow.shared.errorutils.mapper.ErrorMapperTest;
+import net.ow.shared.errorutils.model.APIException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,9 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mock.http.MockHttpInputMessage;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,6 +42,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class ControllerAdviceTest {
     @InjectMocks private ControllerAdvice controllerAdvice;
+
+    @Mock HttpServletRequest request;
 
     @Mock ConstraintViolation<Object> constraintViolation1;
 
@@ -51,7 +58,7 @@ class ControllerAdviceTest {
 
     @Test
     @SneakyThrows
-    void testOnApiException() {
+    void onApiExceptionTest_OK() {
         // Given
         var ex = new APIException(TestServiceError.TEST_ONE, 20, "October");
 
@@ -75,7 +82,7 @@ class ControllerAdviceTest {
 
     @SneakyThrows
     @Test
-    void testOnHttpMessageNotReadableException() {
+    void onHttpMessageNotReadableExceptionTest_whenNoReadableMessage_OK() {
         // Given
         var ex =
                 new HttpMessageNotReadableException(
@@ -103,7 +110,7 @@ class ControllerAdviceTest {
 
     @SneakyThrows
     @Test
-    void testInvalidFormatExceptionWithJsonValue() {
+    void onHttpMessageNotReadableExceptionTest_whenInvalidFormatExceptionWithJsonValue_OK() {
         // Given
         var invalidFormat =
                 new InvalidFormatException(
@@ -138,7 +145,7 @@ class ControllerAdviceTest {
 
     @SneakyThrows
     @Test
-    void testInvalidFormatExceptionWithNonEnum() {
+    void onHttpMessageNotReadableExceptionTest_whenInvalidFormatExceptionWithNonEnum_OK() {
         // Given
         var invalidFormat =
                 new InvalidFormatException(null, "You shall not parse!", "today", Date.class);
@@ -172,7 +179,94 @@ class ControllerAdviceTest {
 
     @SneakyThrows
     @Test
-    void testOnRuntimeException() {
+    void onAuthenticationNotFoundTest_OK() {
+        String method = "method";
+        String requestURI = "request-uri";
+        String remoteAddress = "remote-address";
+
+        when(request.getMethod()).thenReturn(method);
+        when(request.getRequestURI()).thenReturn(requestURI);
+        when(request.getRemoteAddr()).thenReturn(remoteAddress);
+
+        var exception = new AuthenticationCredentialsNotFoundException("Credential not found");
+
+        var response = controllerAdvice.onAuthenticationNotFound(request, exception);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "401-shared-auth",
+					"title": "Unauthorised",
+					"detail": "Credential not found"
+				} ]
+				}""",
+                response.getBody());
+    }
+
+    @SneakyThrows
+    @Test
+    void onDataAccessException_whenAccessDenied_OK() {
+        String method = "method";
+        String pathInfo = "path-info";
+        String remoteAddress = "remote-address";
+
+        when(request.getMethod()).thenReturn(method);
+        when(request.getPathInfo()).thenReturn(pathInfo);
+        when(request.getRemoteAddr()).thenReturn(remoteAddress);
+
+        var exception = new AccessDeniedException("No access");
+
+        var response = controllerAdvice.onDataAccessException(request, exception);
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "403-shared-access_denied",
+					"title": "Access Denied",
+					"detail": "No access"
+				} ]
+				}""",
+                response.getBody());
+    }
+
+    @SneakyThrows
+    @Test
+    void onDataAccessException_whenNotAuthenticated_OK() {
+        String method = "method";
+        String pathInfo = "path-info";
+        String remoteAddress = "remote-address";
+
+        when(request.getMethod()).thenReturn(method);
+        when(request.getPathInfo()).thenReturn(pathInfo);
+        when(request.getRemoteAddr()).thenReturn(remoteAddress);
+
+        var exception = new AuthenticationException("Not authenticated") {};
+
+        var response = controllerAdvice.onDataAccessException(request, exception);
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        ErrorMapperTest.assertJson(
+                """
+				{
+				"errors": [ {
+					"id": "1234-5678-1234-5678",
+					"code": "403-shared-access_denied",
+					"title": "Access Denied",
+					"detail": "Not authenticated"
+				} ]
+				}""",
+                response.getBody());
+    }
+
+    @SneakyThrows
+    @Test
+    void onRuntimeExceptionTest_OK() {
         // Given
         var ex = new RuntimeException("test message");
 
@@ -196,7 +290,7 @@ class ControllerAdviceTest {
 
     @SneakyThrows
     @Test
-    void testOnMethodArgumentNotValidException() {
+    void onnMethodArgumentNotValidException_OK() {
         // Given
         var bindingResult = mock(BindingResult.class);
         when(bindingResult.getFieldErrors())
@@ -241,7 +335,7 @@ class ControllerAdviceTest {
 
     @SneakyThrows
     @Test
-    void testOnConstraintViolationException() {
+    void onConstraintViolationExceptionTest_OK() {
         when(constraintViolation1.getMessage()).thenReturn("Age must be positive");
         var path1 = mock(Path.class);
         when(path1.toString()).thenReturn("/age");

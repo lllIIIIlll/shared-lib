@@ -55,7 +55,7 @@
     <spring-test.version>6.1.3</spring-test.version>
     <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
     <jacoco.version>0.8.8</jacoco.version>
-    <jacoco.minimum-rate>0.00</jacoco.minimum-rate>
+    <jacoco.minimum-rate>0.80</jacoco.minimum-rate>
 
     <!-- Modules -->
     <error-utils.version>0.1.0-SNAPSHOT</error-utils.version>

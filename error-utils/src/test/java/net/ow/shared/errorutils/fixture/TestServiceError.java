@@ -1,8 +1,8 @@
 package net.ow.shared.errorutils.fixture;
 
 import lombok.Getter;
-import net.ow.shared.errorutils.errors.ServiceError;
 import net.ow.shared.errorutils.model.ErrorProperties;
+import net.ow.shared.errorutils.model.ServiceError;
 import org.springframework.http.HttpStatus;
 
 @Getter

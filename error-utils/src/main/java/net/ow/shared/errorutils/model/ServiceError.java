@@ -1,7 +1,6 @@
-package net.ow.shared.errorutils.errors;
+package net.ow.shared.errorutils.model;
 
 import java.io.Serializable;
-import net.ow.shared.errorutils.model.ErrorProperties;
 import org.springframework.http.HttpStatus;
 
 public interface ServiceError extends Serializable {

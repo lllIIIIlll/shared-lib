@@ -208,7 +208,7 @@ public class ErrorMapper {
             var spanId = context.getSpanId();
 
             return Map.of("operation_Id", traceId, "operationParent_Id", spanId);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             log.info("Failed to add monitoring metadata", e);
             return Collections.emptyMap();
         }

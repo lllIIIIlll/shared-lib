@@ -40,6 +40,10 @@
     <!-- Sonar -->
     <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/jacoco-aggregator/target/site/jacoco-aggregate/jacoco.xml/</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.exclusions>
+      **/model/**/*,
+      **/dto/**/*
+    </sonar.exclusions>
 
     <!-- Lombok -->
     <lombok.version>1.18.30</lombok.version>
@@ -214,7 +218,6 @@
           <version>${jacoco.version}</version>
           <configuration>
             <excludes>
-              <exclude>**/dto/**/*</exclude>
               <exclude>**/dto/**/*</exclude>
               <exclude>**/model/**/*</exclude>
             </excludes>

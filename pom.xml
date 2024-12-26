@@ -47,6 +47,7 @@
 
     <!-- Styling -->
     <spotless.version>2.41.1</spotless.version>
+    <google-java-format.version>1.20.0</google-java-format.version>
 
     <!-- Testing -->
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
@@ -182,24 +183,26 @@
         <artifactId>spotless-maven-plugin</artifactId>
         <version>${spotless.version}</version>
         <configuration>
-          <ratchetFrom>origin/dev</ratchetFrom>
           <java>
             <includes>
-              <include>src/main/java/**/*.java</include>
-              <include>src/test/java/**/*.java</include>
+              <include>src/**/*.java</include>
             </includes>
-            <importOrder />
-            <removeUnusedImports />
-            <toggleOffOn/>
-            <trimTrailingWhitespace/>
-            <endWithNewline/>
-            <indent>
-              <tabs>true</tabs>
-              <spacesPerTab>4</spacesPerTab>
-            </indent>
-            <palantirJavaFormat/>
+            <googleJavaFormat>
+              <version>${google-java-format.version}</version>
+              <style>AOSP</style>
+            </googleJavaFormat>
+            <importOrder/>
+            <removeUnusedImports/>
           </java>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+              <goal>apply</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
 

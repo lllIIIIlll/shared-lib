@@ -16,20 +16,17 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ErrorSource implements Serializable {
     /**
-     * A <a href="https://tools.ietf.org/html/rfc6901>JSON Pointer</a> to the value in the request document that
-     * caused the error [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-     * This Must point to a value in the request document that exists.
+     * A <a href="https://tools.ietf.org/html/rfc6901>JSON Pointer</a> to the value in the request
+     * document that caused the error [e.g. "/data" for a primary data object, or
+     * "/data/attributes/title" for a specific attribute]. This Must point to a value in the request
+     * document that exists.
      */
     private String pointer;
 
-    /**
-     * Indicates which URI query parameter caused the error
-     */
+    /** Indicates which URI query parameter caused the error */
     private String parameter;
 
-    /**
-     * Indicates the name of a single request handler which caused the error.
-     */
+    /** Indicates the name of a single request handler which caused the error. */
     private String header;
 
     public static ErrorSource withJsonPointer(String pointer) {

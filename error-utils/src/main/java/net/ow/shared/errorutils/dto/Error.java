@@ -8,7 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * Error objects provide additional information about problems encountered while performing an operation.
+ * Error objects provide additional information about problems encountered while performing an
+ * operation.
  *
  * @see <a href="https://jsonapi.org/format/#errors">Error Objects</a>
  */
@@ -23,18 +24,14 @@ public class Error {
     private String title;
 
     /**
-     * Error to be displayed in user.
-     * Can be situation-specific but:
-     * - DO NOT include personal/account info
-     * - DO NOT include information ro stock trace
+     * Error to be displayed in user. Can be situation-specific but: - DO NOT include
+     * personal/account info - DO NOT include information ro stock trace
      */
     private String detail;
 
     private ErrorSource source;
 
-    /**
-     * Anything else that might be useful to the user and/or support
-     */
+    /** Anything else that might be useful to the user and/or support */
     private Map<String, Serializable> meta;
 
     public static class ErrorBuilder {

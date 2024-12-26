@@ -7,8 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class ErrorProperties implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+    @Serial private static final long serialVersionUID = 1L;
 
     private HttpStatus status;
 
@@ -64,8 +63,15 @@ public class ErrorProperties implements Serializable {
         }
 
         public String toString() {
-            return "ErrorProperties.ErrorPropertiesBuilder(status=" + this.status + ", code=" + this.code + ", title="
-                    + this.title + ", message=" + this.message + ")";
+            return "ErrorProperties.ErrorPropertiesBuilder(status="
+                    + this.status
+                    + ", code="
+                    + this.code
+                    + ", title="
+                    + this.title
+                    + ", message="
+                    + this.message
+                    + ")";
         }
     }
 }

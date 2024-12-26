@@ -11,8 +11,6 @@
 
     <artifactId>jacoco-aggregator</artifactId>
 
-
-
     <dependencies>
         <dependency>
             <groupId>net.ow.shared</groupId>

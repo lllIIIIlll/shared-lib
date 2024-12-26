@@ -1,4 +1,4 @@
-package net.ow.shared.errorutils.errors;
+package net.ow.shared.errorutils.model;
 
 import java.io.Serializable;
 import java.util.Map;

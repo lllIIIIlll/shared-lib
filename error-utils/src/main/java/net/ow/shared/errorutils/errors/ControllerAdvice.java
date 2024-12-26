@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.ow.shared.errorutils.dto.APIResponse;
 import net.ow.shared.errorutils.dto.Error;
 import net.ow.shared.errorutils.mapper.ErrorMapper;
+import net.ow.shared.errorutils.model.APIException;
 import net.ow.shared.errorutils.util.LocaleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class ControllerAdvice {
 
         var status = HttpStatus.UNAUTHORIZED;
         return toResponseEntity(
-                status, errorMapper.toError(e, status, "shared-auth", "Unauthorised"));
+                status, errorMapper.toError(e, status, "-shared-auth", "Unauthorised"));
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)

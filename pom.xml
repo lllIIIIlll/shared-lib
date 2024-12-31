@@ -13,6 +13,7 @@
   <modules>
     <module>error-utils</module>
     <module>jacoco-aggregator</module>
+    <module>property-utils</module>
   </modules>
 
   <properties>
@@ -33,6 +34,7 @@
     <!-- Validation -->
     <javax.validation.version>2.0.1.Final</javax.validation.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
+    <micrometer-core.version>1.13.3</micrometer-core.version>
 
     <!-- Tracing -->
     <opentelementry.version>1.25.0</opentelementry.version>
@@ -42,7 +44,8 @@
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/jacoco-aggregator/target/site/jacoco-aggregate/jacoco.xml/</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.exclusions>
       **/model/**/*,
-      **/dto/**/*
+      **/dto/**/*,
+      **/propertyutils/factory/YAMLPropertySourceFactory.*
     </sonar.exclusions>
 
     <!-- Lombok -->
@@ -63,6 +66,7 @@
 
     <!-- Modules -->
     <error-utils.version>0.1.0-SNAPSHOT</error-utils.version>
+    <property-utils.version>0.1.0-SNAPSHOT</property-utils.version>
   </properties>
 
   <dependencies>
@@ -90,6 +94,11 @@
         <artifactId>error-utils</artifactId>
         <version>${error-utils.version}</version>
       </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>property-utils</artifactId>
+        <version>${property-utils.version}</version>
+      </dependency>
 
       <!-- Spring Dependencies -->
       <dependency>
@@ -100,6 +109,11 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
+        <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
         <version>${spring-boot.version}</version>
       </dependency>
 
@@ -125,6 +139,11 @@
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
         <version>${javax.servlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-core</artifactId>
+        <version>${micrometer-core.version}</version>
       </dependency>
 
       <!-- Tracing -->
@@ -220,6 +239,7 @@
             <excludes>
               <exclude>**/dto/**/*</exclude>
               <exclude>**/model/**/*</exclude>
+              <exclude>**/propertyutils/factory/YAMLPropertySourceFactory.*</exclude>
             </excludes>
           </configuration>
         </plugin>

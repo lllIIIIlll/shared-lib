@@ -44,7 +44,8 @@
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/jacoco-aggregator/target/site/jacoco-aggregate/jacoco.xml/</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.exclusions>
       **/model/**/*,
-      **/dto/**/*
+      **/dto/**/*,
+      **/propertyutils/factory/YAMLPropertySourceFactory.*
     </sonar.exclusions>
 
     <!-- Lombok -->
@@ -65,6 +66,7 @@
 
     <!-- Modules -->
     <error-utils.version>0.1.0-SNAPSHOT</error-utils.version>
+    <property-utils.version>0.1.0-SNAPSHOT</property-utils.version>
   </properties>
 
   <dependencies>
@@ -91,6 +93,11 @@
         <groupId>net.ow.shared</groupId>
         <artifactId>error-utils</artifactId>
         <version>${error-utils.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>property-utils</artifactId>
+        <version>${property-utils.version}</version>
       </dependency>
 
       <!-- Spring Dependencies -->
@@ -232,6 +239,7 @@
             <excludes>
               <exclude>**/dto/**/*</exclude>
               <exclude>**/model/**/*</exclude>
+              <exclude>**/propertyutils/factory/YAMLPropertySourceFactory.*</exclude>
             </excludes>
           </configuration>
         </plugin>

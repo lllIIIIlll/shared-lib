@@ -16,6 +16,10 @@
             <groupId>net.ow.shared</groupId>
             <artifactId>error-utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.ow.shared</groupId>
+            <artifactId>property-utils</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

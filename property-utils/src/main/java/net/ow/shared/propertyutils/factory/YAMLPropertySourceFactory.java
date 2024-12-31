@@ -21,6 +21,7 @@ public class YAMLPropertySourceFactory implements PropertySourceFactory {
 
         Properties properties = factory.getObject();
         assert properties != null : ERROR_MESSAGE;
+
         return new PropertiesPropertySource(
                 Objects.requireNonNullElseGet(
                         name, () -> Objects.requireNonNull(resource.getResource().getFilename())),

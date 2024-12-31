@@ -69,6 +69,42 @@
     <property-utils.version>0.1.0-SNAPSHOT</property-utils.version>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>nexus</id>
+      <url>http://113.65.33.42:8081/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <url>http://113.65.33.42:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>nexus</id>
+      <url>http://113.65.33.42:8081/repository/maven-public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>nexus</id>
+      <url>http://113.65.33.42:8081/repository/maven-public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
   <dependencies>
     <!-- Lombok -->
     <dependency>

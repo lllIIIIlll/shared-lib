@@ -14,7 +14,7 @@
         <mirror>
             <id>nexus</id>
             <mirrorOf>*</mirrorOf>
-            <url>http://113.65.33.42:8081/repository/maven-public/</url>
+            <url>http://www.oliverw.dns-dynamic.net:8081/repository/maven-public/</url>
         </mirror>
     </mirrors>
 </settings>

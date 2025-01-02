@@ -13,7 +13,7 @@
   <modules>
     <module>error-utils</module>
     <module>jacoco-aggregator</module>
-    <module>property-utils</module>
+    <module>common</module>
   </modules>
 
   <properties>
@@ -45,7 +45,7 @@
     <sonar.exclusions>
       **/model/**/*,
       **/dto/**/*,
-      **/propertyutils/factory/YAMLPropertySourceFactory.*
+      **/common/factory/YAMLPropertySourceFactory.*
     </sonar.exclusions>
 
     <!-- Lombok -->
@@ -66,7 +66,7 @@
 
     <!-- Modules -->
     <error-utils.version>0.1.0-SNAPSHOT</error-utils.version>
-    <property-utils.version>0.1.0-SNAPSHOT</property-utils.version>
+    <common.version>0.1.0-SNAPSHOT</common.version>
   </properties>
 
   <distributionManagement>
@@ -132,8 +132,8 @@
       </dependency>
       <dependency>
         <groupId>net.ow.shared</groupId>
-        <artifactId>property-utils</artifactId>
-        <version>${property-utils.version}</version>
+        <artifactId>common</artifactId>
+        <version>${common.version}</version>
       </dependency>
 
       <!-- Spring Dependencies -->
@@ -275,7 +275,7 @@
             <excludes>
               <exclude>**/dto/**/*</exclude>
               <exclude>**/model/**/*</exclude>
-              <exclude>**/propertyutils/factory/YAMLPropertySourceFactory.*</exclude>
+              <exclude>**/common/factory/YAMLPropertySourceFactory.*</exclude>
             </excludes>
           </configuration>
         </plugin>

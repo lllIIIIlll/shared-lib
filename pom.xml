@@ -14,6 +14,7 @@
     <module>error-utils</module>
     <module>jacoco-aggregator</module>
     <module>property-utils</module>
+      <module>common</module>
   </modules>
 
   <properties>

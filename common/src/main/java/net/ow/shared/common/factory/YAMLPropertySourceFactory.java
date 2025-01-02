@@ -1,4 +1,4 @@
-package net.ow.shared.propertyutils.factory;
+package net.ow.shared.common.factory;
 
 import io.micrometer.common.lang.NonNullApi;
 import io.micrometer.common.lang.Nullable;

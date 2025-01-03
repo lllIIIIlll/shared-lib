@@ -22,7 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- Spring Dependencies' version -->
-    <spring.webmvc.version>6.1.13</spring.webmvc.version>
+    <spring.webmvc.version>6.2.1</spring.webmvc.version>
     <spring-boot.version>3.1.0</spring-boot.version>
 
     <!-- Dependencies' version -->

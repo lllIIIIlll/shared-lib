@@ -41,7 +41,7 @@
 
     <!-- Sonar -->
     <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/jacoco-aggregator/target/site/jacoco-aggregate/jacoco.xml/</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/jacoco-aggregator/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.exclusions>
       **/model/**/*,
       **/dto/**/*,

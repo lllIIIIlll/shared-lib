@@ -15,15 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Set up JDK 17"
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-
       - name: "Analyze with SonarCloud"
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -P sonar -s ./settings.xml
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+        uses: lllIIIIlll/actions/sonar-scan@main
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          nexus-user: ${{ secrets.NEXUS_USERNAME }}
+          nexus-password: ${{ secrets.NEXUS_PASSWORD }}

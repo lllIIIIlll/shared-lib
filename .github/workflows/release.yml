@@ -1,0 +1,23 @@
+name: Run Sonar Scan
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove SNAPSHOT suffix
+        uses: lllIIIIlll/actions/maven-remove-snapshot-suffix@main
+        with:
+          nexus-user: ${{ secrets.NEXUS_USERNAME }}
+          nexus-password: ${{ secrets.NEXUS_PASSWORD }}
+          includes-dependencies: net.ow.shared:*

@@ -22,6 +22,10 @@ Contains utility functions for handling errors and exceptions.
 
 Aggregates Jacoco reports from all modules.
 
+### JSON Utils Module
+
+Utility functions for working with JSON data in lllIIIIlll applications.
+
 ## Documentation
 
 For detailed documentation of each module, please refer to the respective module directories.
@@ -67,6 +71,7 @@ shared-lib/
 ├── common/
 ├── error-utils/
 ├── jacoco-aggregator/
+├── json-utils/
 ```
 
 ### Branch Strategy

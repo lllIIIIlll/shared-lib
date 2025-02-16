@@ -27,7 +27,7 @@ jobs:
 
       - name: Deploy
         shell: bash
-        run: mvn deploy -s ./settings.xml
+        run: mvn deploy -s ./settings.xml -Dmaven.metadata.legacy=true
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}

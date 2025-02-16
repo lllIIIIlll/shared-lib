@@ -7,7 +7,7 @@ on:
 
 jobs:
   remove-snapshot-suffix:
-    if: "${{ startsWith(github.event.pull_request.title, '[RELEASE]') && startsWith(github.ref_name, 'release-'}}"
+    if: "${{ startsWith(github.event.pull_request.title, '[RELEASE]') && startsWith(github.ref_name, 'release-')}}"
     runs-on: ubuntu-latest
 
     permissions:

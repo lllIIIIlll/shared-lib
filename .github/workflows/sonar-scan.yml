@@ -1,0 +1,23 @@
+name: Run Sonar Scan
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  sonar-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Analyze with SonarCloud"
+        uses: lllIIIIlll/actions/sonar-scan@main
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          nexus-user: ${{ secrets.NEXUS_USERNAME }}
+          nexus-password: ${{ secrets.NEXUS_PASSWORD }}

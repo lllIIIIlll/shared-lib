@@ -68,6 +68,7 @@
     <!-- Modules -->
     <error-utils.version>0.2.0-SNAPSHOT</error-utils.version>
     <common.version>0.2.0-SNAPSHOT</common.version>
+    <json-utils.version>0.2.0-SNAPSHOT</json-utils.version>
   </properties>
 
   <distributionManagement>
@@ -135,6 +136,11 @@
         <groupId>net.ow.shared</groupId>
         <artifactId>common</artifactId>
         <version>${common.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>json-utils</artifactId>
+        <version>${json-utils.version}</version>
       </dependency>
 
       <!-- Spring Dependencies -->

@@ -20,6 +20,10 @@
             <groupId>net.ow.shared</groupId>
             <artifactId>common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.ow.shared</groupId>
+            <artifactId>json-utils</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

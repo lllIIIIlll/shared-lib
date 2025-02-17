@@ -111,6 +111,3 @@ Open this project in your favorite terminal.
 
 ##### Build specific module
 `mvn clean install -pl <module-name>`
-
-### Publishing
-New versions are automatically published to Nexus upon merge to main branch.

@@ -7,7 +7,7 @@
   <groupId>net.ow.shared</groupId>
   <artifactId>shared-lib</artifactId>
   <name>Shared Lib</name>
-  <version>0.1.0</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -66,8 +66,8 @@
     <jacoco.minimum-rate>0.80</jacoco.minimum-rate>
 
     <!-- Modules -->
-    <error-utils.version>0.1.0</error-utils.version>
-    <common.version>0.1.0</common.version>
+    <error-utils.version>0.2.0-SNAPSHOT</error-utils.version>
+    <common.version>0.2.0-SNAPSHOT</common.version>
   </properties>
 
   <distributionManagement>

@@ -30,6 +30,12 @@
             <artifactId>micrometer-core</artifactId>
         </dependency>
 
+        <!-- JWT -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+        </dependency>
+
         <!-- tests -->
         <dependency>
             <groupId>org.springframework</groupId>

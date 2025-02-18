@@ -25,6 +25,7 @@
     <!-- Spring Dependencies' version -->
     <spring.webmvc.version>6.2.1</spring.webmvc.version>
     <spring-boot.version>3.1.0</spring-boot.version>
+    <spring-cloud.version>2022.0.4</spring-cloud.version>
 
     <!-- JSON -->
     <jackson.version>2.14.2</jackson.version>
@@ -56,6 +57,9 @@
     <!-- Styling -->
     <spotless.version>2.41.1</spotless.version>
     <google-java-format.version>1.20.0</google-java-format.version>
+
+    <!-- JWT -->
+    <nimbus-jwt.version>9.37.3</nimbus-jwt.version>
 
     <!-- Testing -->
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
@@ -159,6 +163,13 @@
         <artifactId>spring-boot-starter</artifactId>
         <version>${spring-boot.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
 
       <!-- Jackson -->
       <dependency>
@@ -194,6 +205,13 @@
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-api</artifactId>
         <version>${opentelementry.version}</version>
+      </dependency>
+
+      <!-- JWT -->
+      <dependency>
+        <groupId>com.nimbusds</groupId>
+        <artifactId>nimbus-jose-jwt</artifactId>
+        <version>${nimbus-jwt.version}</version>
       </dependency>
 
       <!-- log4j -->

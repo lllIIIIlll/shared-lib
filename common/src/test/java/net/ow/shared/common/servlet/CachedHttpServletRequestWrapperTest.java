@@ -86,7 +86,7 @@ class CachedHttpServletRequestWrapperTest {
 
     @Test
     @SneakyThrows
-    public void getReaderTest_whenSpecialCharacters_OK() {
+    void getReaderTest_whenSpecialCharacters_OK() {
         byte[] expectedPayload = "test@#%&*()".getBytes();
         InputStream inputStream = new ByteArrayInputStream(expectedPayload);
         ServletInputStream servletInputStream = new DelegatingServletInputStream(inputStream);
@@ -182,7 +182,7 @@ class CachedHttpServletRequestWrapperTest {
 
     @Test
     @SneakyThrows
-    public void readTest_whenEndOfStream_thenReturnMinusOne() {
+    void readTest_whenEndOfStream_thenReturnMinusOne() {
         byte[] expectedPayload = "testPayload".getBytes();
         InputStream inputStream = new ByteArrayInputStream(expectedPayload);
         ServletInputStream servletInputStream = new DelegatingServletInputStream(inputStream);
@@ -190,7 +190,8 @@ class CachedHttpServletRequestWrapperTest {
 
         cachedRequestWrapper = new CachedHttpServletRequestWrapper(mockRequest);
         ServletInputStream actualInputStream = cachedRequestWrapper.getInputStream();
-        while (actualInputStream.read() != -1) {}
+        while (actualInputStream.read() != -1)
+            ;
 
         int actualByte = actualInputStream.read();
         assertEquals(-1, actualByte, "At the end of the stream, read should return -1");

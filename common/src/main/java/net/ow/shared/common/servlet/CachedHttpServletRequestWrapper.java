@@ -29,6 +29,7 @@ public class CachedHttpServletRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Slf4j
+    @SuppressWarnings("all")
     class CachedServletInputStream extends ServletInputStream {
         private final InputStream cachedInputStream;
 

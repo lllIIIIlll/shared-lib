@@ -11,12 +11,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JWTUtils {
     @Nullable
-    public static Object getClaim(@NonNull String jwt, @NonNull String key) throws ParseException {
+    public static <T> T getClaim(@NonNull String jwt, @NonNull String key, @NonNull Class<T> type)
+            throws ParseException {
         if (jwt.isEmpty()) {
             return null;
         }
 
         JWTClaimsSet claims = JWTParser.parse(jwt).getJWTClaimsSet();
-        return claims.getClaim(key);
+
+        Object claim = claims.getClaim(key);
+        if (claim == null) {
+            return null;
+        }
+
+        if (!type.isInstance(claim)) {
+            throw new ClassCastException("Claim cannot be cast to " + type.getName());
+        }
+
+        return type.cast(claim);
     }
 }

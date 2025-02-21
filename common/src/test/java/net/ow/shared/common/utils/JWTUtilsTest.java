@@ -38,27 +38,28 @@ class JWTUtilsTest {
 
     @Test
     @SneakyThrows
-    void getClaim_whenEmptyJWT_thenReturnsNull() {
-        Object claim = JWTUtils.getClaim("", "name");
+    void getClaimTest_whenEmptyJWT_thenReturnsNull() {
+        Object claim = JWTUtils.getClaim("", "name", String.class);
         assertNull(claim);
     }
 
     @Test
     @SneakyThrows
-    void getClaim_whenValidJWTAndKey_thenReturnsValue() {
-        Object name = JWTUtils.getClaim("valid.jwt.token", "name");
+    void getClaimTest_whenValidJWTAndKey_thenReturnsValue() {
+        Object name = JWTUtils.getClaim("valid.jwt.token", "name", String.class);
         assertEquals("John Doe", name);
     }
 
     @Test
     @SneakyThrows
-    void getClaim_whenValidJWTAndInvalidKey_thenReturnsNull() {
-        Object nonExistentClaim = JWTUtils.getClaim("valid.jwt.token", "nonExistentKey");
+    void getClaimTest_whenValidJWTAndInvalidKey_thenReturnsNull() {
+        Object nonExistentClaim =
+                JWTUtils.getClaim("valid.jwt.token", "nonExistentKey", String.class);
         assertNull(nonExistentClaim);
     }
 
     @Test
-    void getClaim_whenInvalidJWT_thenThrowsParseException() {
+    void getClaimTest_whenInvalidJWT_thenThrowsParseException() {
         mockedJWTParser
                 .when(() -> JWTParser.parse("invalid.jwt.token"))
                 .thenThrow(ParseException.class);
@@ -67,7 +68,17 @@ class JWTUtilsTest {
         assertThrows(
                 ParseException.class,
                 () -> {
-                    JWTUtils.getClaim(invalidJwt, "name");
+                    JWTUtils.getClaim(invalidJwt, "name", String.class);
+                });
+    }
+
+    @Test
+    @SneakyThrows
+    void getClaimTest_whenTypeMismatch_thenThrowsClassCastException() {
+        assertThrows(
+                ClassCastException.class,
+                () -> {
+                    JWTUtils.getClaim("valid.jwt.token", "name", Integer.class);
                 });
     }
 }

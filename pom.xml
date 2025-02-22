@@ -15,6 +15,7 @@
     <module>jacoco-aggregator</module>
     <module>common</module>
     <module>json-utils</module>
+    <module>log-utils</module>
   </modules>
 
   <properties>
@@ -26,6 +27,7 @@
     <spring.webmvc.version>6.2.1</spring.webmvc.version>
     <spring-boot.version>3.1.0</spring-boot.version>
     <spring-cloud.version>2022.0.4</spring-cloud.version>
+    <spring-oauth2.version>2.3.5.RELEASE</spring-oauth2.version>
 
     <!-- JSON -->
     <jackson.version>2.14.2</jackson.version>
@@ -76,6 +78,7 @@
     <error-utils.version>0.2.0-SNAPSHOT</error-utils.version>
     <common.version>0.2.0-SNAPSHOT</common.version>
     <json-utils.version>0.2.0-SNAPSHOT</json-utils.version>
+    <log-utils.version>0.2.0-SNAPSHOT</log-utils.version>
   </properties>
 
   <distributionManagement>
@@ -92,7 +95,7 @@
   <repositories>
     <repository>
       <id>nexus</id>
-      <url>http://www.oliverw.dns-dynamic.net8081/repository/maven-public</url>
+      <url>http://www.oliverw.dns-dynamic.net:8081/repository/maven-public</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -149,6 +152,11 @@
         <artifactId>json-utils</artifactId>
         <version>${json-utils.version}</version>
       </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>log-utils</artifactId>
+        <version>${log-utils.version}</version>
+      </dependency>
 
       <!-- Spring Dependencies -->
       <dependency>
@@ -175,8 +183,18 @@
       </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-logging</artifactId>
+        <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
         <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security.oauth</groupId>
+        <artifactId>spring-security-oauth2</artifactId>
+        <version>${spring-oauth2.version}</version>
       </dependency>
 
       <!-- Jackson -->

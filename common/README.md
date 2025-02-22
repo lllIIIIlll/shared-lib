@@ -4,7 +4,9 @@ Core utilities and shared components for lllIIIIlll applications.
 
 ## Features
 
-- `yaml-property-source-factory`: A custom YAML property source factory that enables loading YAML configuration files in Spring applications.
+- `YAMLPropertySourceFactory`: A custom YAML property source factory that enables loading YAML configuration files in Spring applications. It provides seamless integration with Spring's property loading mechanism.
+- `JWTUtils`: Built-in support for JWT token handling and validation using the Nimbus JWT library. It provides type-safe claim extraction with null-safety handling, supporting various data types through generic type parameters. The utility helps prevent common JWT-related issues like type casting errors and null pointer exceptions.
+- `CachedHttpServletRequestWrapper`: A specialized HTTP request wrapper that enables multiple reads of the request body by caching the input stream data. This is particularly useful in scenarios where the request body needs to be processed multiple times, such as logging, request validation, and request processing.
 
 ## Installation
 
@@ -14,6 +16,72 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>net.ow.shared</groupId>
     <artifactId>common</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
+
+## Usage
+
+### YAML Property Source Factory
+
+To use the YAML property source factory in your Spring application:
+
+```java
+@Configuration
+@PropertySource(value = "classpath:config.yml", factory = YAMLPropertySourceFactory.class)
+public class YourConfig {
+    // Your configuration properties
+}
+```
+
+This enables you to use YAML files for configuration with proper type conversion and validation.
+
+### JWT Integration
+
+The module provides JWT support through Nimbus JWT library integration. The `JWTUtils` class offers a type-safe way to extract claims from JWT tokens:
+
+```java
+// Extract a string claim
+String subject = JWTUtils.getClaim(jwtToken, "sub", String.class);
+
+// Extract a numeric claim
+Long timestamp = JWTUtils.getClaim(jwtToken, "timestamp", Long.class);
+
+// Extract a custom object claim
+Map<String, Object> customClaim = JWTUtils.getClaim(jwtToken, "custom", Map.class);
+```
+
+### Request Body Caching
+
+To enable multiple reads of the request body in your web application:
+
+```java
+@Component
+public class RequestBodyCachingFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        CachedHttpServletRequestWrapper wrappedRequest = new CachedHttpServletRequestWrapper(request);
+        filterChain.doFilter(wrappedRequest, response);
+    }
+}
+```
+
+After wrapping the request, you can read the body multiple times:
+
+```java
+@PostMapping("/api/data")
+public ResponseEntity<?> handleRequest(HttpServletRequest request) throws IOException {
+    // First read
+    String body = new BufferedReader(request.getReader())
+            .lines()
+            .collect(Collectors.joining("\n"));
+    
+    // Second read - still available
+    String sameBody = new BufferedReader(request.getReader())
+            .lines()
+            .collect(Collectors.joining("\n"));
+    
+    // Process the request body
+    return ResponseEntity.ok().build();
+}

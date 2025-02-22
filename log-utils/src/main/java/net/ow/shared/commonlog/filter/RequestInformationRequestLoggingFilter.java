@@ -1,5 +1,7 @@
 package net.ow.shared.commonlog.filter;
 
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
+
 import io.micrometer.common.lang.NonNullApi;
 import io.micrometer.core.instrument.util.IOUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +23,8 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 @Getter
 @Setter
-@Order(2)
 @NonNullApi
+@Order(LOWEST_PRECEDENCE - 1)
 public class RequestInformationRequestLoggingFilter extends AbstractRequestLoggingFilter {
     private static Logger log =
             LoggerFactory.getLogger(RequestInformationRequestLoggingFilter.class);

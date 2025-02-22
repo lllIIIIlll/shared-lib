@@ -24,6 +24,10 @@
             <groupId>net.ow.shared</groupId>
             <artifactId>json-utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.ow.shared</groupId>
+            <artifactId>log-utils</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

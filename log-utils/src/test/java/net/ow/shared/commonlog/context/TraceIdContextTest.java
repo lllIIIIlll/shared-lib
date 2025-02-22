@@ -13,12 +13,12 @@ class TraceIdContextTest {
     private MockedStatic<MDC> mockedMDC;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockedMDC = mockStatic(MDC.class);
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         if (mockedMDC != null) {
             mockedMDC.close();
         }

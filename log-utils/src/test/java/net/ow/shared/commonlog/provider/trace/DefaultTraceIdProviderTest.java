@@ -12,13 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class DefaultTraceIdProviderTest {
+class DefaultTraceIdProviderTest {
     @InjectMocks private DefaultTraceIdProvider traceIdProvider;
 
     @Mock private HttpServletRequest request;
 
     @Test
-    public void getTraceIdTest_OK() {
+    void getTraceIdTest_OK() {
         String expectedTraceId = "generatedTraceId";
 
         try (var mockedStatic = mockStatic(TraceIdUtils.class)) {

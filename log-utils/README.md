@@ -155,7 +155,7 @@ public class HeaderBasedTraceIdProvider implements TraceIdProvider {
     private final TraceIdProvider fallbackProvider;
     
     public HeaderBasedTraceIdProvider() {
-        this.fallbackProvider = new UuidTraceIdProvider();
+        this.fallbackProvider = new UUIDTraceIdProvider();
     }
     
     @Override

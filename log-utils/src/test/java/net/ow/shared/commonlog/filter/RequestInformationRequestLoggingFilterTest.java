@@ -21,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
+import org.slf4j.event.Level;
+import org.slf4j.spi.LoggingEventBuilder;
 import org.springframework.mock.web.DelegatingServletInputStream;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -35,7 +37,11 @@ class RequestInformationRequestLoggingFilterTest {
 
     @Mock private ClientInformationProvider clientInformationProvider;
 
+    @Mock private Level logLevel;
+
     @Mock private Logger logger;
+
+    @Mock private LoggingEventBuilder loggingEventBuilder;
 
     @Mock private Clock clock;
 
@@ -44,6 +50,9 @@ class RequestInformationRequestLoggingFilterTest {
         ReflectionTestUtils.setField(requestInformationRequestLoggingFilter, "log", logger);
         requestInformationRequestLoggingFilter.setClientInformationProvider(
                 clientInformationProvider);
+        requestInformationRequestLoggingFilter.setLogLevel(logLevel);
+
+        when(logger.atLevel(logLevel)).thenReturn(loggingEventBuilder);
     }
 
     @Test
@@ -53,7 +62,7 @@ class RequestInformationRequestLoggingFilterTest {
 
         requestInformationRequestLoggingFilter.beforeRequest(request, "Test message");
 
-        verify(logger, times(1)).info("Request Received: {}", "[GET] /test");
+        verify(loggingEventBuilder, times(1)).log("Request Received: {}", "[GET] /test");
         verify(request, times(0)).getQueryString();
         verify(clientInformationProvider, times(0)).getClientInformation(request);
     }
@@ -68,7 +77,8 @@ class RequestInformationRequestLoggingFilterTest {
 
         requestInformationRequestLoggingFilter.beforeRequest(request, "Test message");
 
-        verify(logger, times(1)).info("Request Received: {}", "[GET] /test?param1=value1");
+        verify(loggingEventBuilder, times(1))
+                .log("Request Received: {}", "[GET] /test?param1=value1");
         verify(clientInformationProvider, times(0)).getClientInformation(request);
     }
 
@@ -78,11 +88,13 @@ class RequestInformationRequestLoggingFilterTest {
 
         when(request.getMethod()).thenReturn("POST");
         when(request.getRequestURI()).thenReturn("/test");
-        when(clientInformationProvider.getClientInformation(request)).thenReturn("Client Info");
+        when(clientInformationProvider.getClientInformation(any(HttpServletRequest.class)))
+                .thenReturn("Client Info");
 
         requestInformationRequestLoggingFilter.beforeRequest(request, "Test message");
 
-        verify(logger, times(1)).info("Request Received: {}", "[POST] /test Client Info");
+        verify(loggingEventBuilder, times(1))
+                .log("Request Received: {}", "[POST] /test Client Info");
     }
 
     @Test
@@ -100,8 +112,8 @@ class RequestInformationRequestLoggingFilterTest {
 
         requestInformationRequestLoggingFilter.beforeRequest(request, "Test message");
 
-        verify(logger, times(1))
-                .info("Request Received: {}", "[PUT] /test\n[Request Body]\nRequest Body");
+        verify(loggingEventBuilder, times(1))
+                .log("Request Received: {}", "[PUT] /test\n[Request Body]\nRequest Body");
     }
 
     @Test
@@ -115,7 +127,7 @@ class RequestInformationRequestLoggingFilterTest {
 
         requestInformationRequestLoggingFilter.beforeRequest(request, "Test message");
 
-        verify(logger, times(1)).info("Request Received: {}", "[POST] /test");
+        verify(loggingEventBuilder, times(1)).log("Request Received: {}", "[POST] /test");
         verify(logger, times(1)).error("Cannot log request body. Error: {}", "IO Error");
     }
 
@@ -134,12 +146,13 @@ class RequestInformationRequestLoggingFilterTest {
         when(request.getRequestURI()).thenReturn("/test");
         when(request.getQueryString()).thenReturn("param1=value1");
         when(request.getInputStream()).thenReturn(servletInputStream);
-        when(clientInformationProvider.getClientInformation(request)).thenReturn("Client Info");
+        when(clientInformationProvider.getClientInformation(any(HttpServletRequest.class)))
+                .thenReturn("Client Info");
 
         requestInformationRequestLoggingFilter.beforeRequest(request, "Test message");
 
-        verify(logger, times(1))
-                .info(
+        verify(loggingEventBuilder, times(1))
+                .log(
                         "Request Received: {}",
                         "[PUT] /test?param1=value1 Client Info\n[Request Body]\nRequest Body");
     }
@@ -181,7 +194,7 @@ class RequestInformationRequestLoggingFilterTest {
 
             requestInformationRequestLoggingFilter.afterRequest(request, "Test message");
 
-            verify(logger, times(1)).info("Request processed within {}ms", duartion);
+            verify(loggingEventBuilder, times(1)).log("Request processed within {}ms", duartion);
             assertNull(MDC.get(RequestInformationRequestLoggingFilter.REQUEST_TIMESTAMP_KEY));
         }
     }

@@ -18,7 +18,7 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>net.ow.shared</groupId>
     <artifactId>error-utils</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 

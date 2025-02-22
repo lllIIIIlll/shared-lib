@@ -7,7 +7,7 @@
   <groupId>net.ow.shared</groupId>
   <artifactId>shared-lib</artifactId>
   <name>Shared Lib</name>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -15,6 +15,7 @@
     <module>jacoco-aggregator</module>
     <module>common</module>
     <module>json-utils</module>
+    <module>log-utils</module>
   </modules>
 
   <properties>
@@ -25,6 +26,8 @@
     <!-- Spring Dependencies' version -->
     <spring.webmvc.version>6.2.1</spring.webmvc.version>
     <spring-boot.version>3.1.0</spring-boot.version>
+    <spring-cloud.version>2022.0.4</spring-cloud.version>
+    <spring-oauth2.version>2.3.5.RELEASE</spring-oauth2.version>
 
     <!-- JSON -->
     <jackson.version>2.14.2</jackson.version>
@@ -57,6 +60,12 @@
     <spotless.version>2.41.1</spotless.version>
     <google-java-format.version>1.20.0</google-java-format.version>
 
+    <!-- JWT -->
+    <nimbus-jwt.version>9.37.3</nimbus-jwt.version>
+
+    <!-- Utils -->
+    <commons-io.version>2.14.0</commons-io.version>
+
     <!-- Testing -->
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
     <mockito.version>5.10.0</mockito.version>
@@ -66,8 +75,10 @@
     <jacoco.minimum-rate>0.80</jacoco.minimum-rate>
 
     <!-- Modules -->
-    <error-utils.version>0.1.0</error-utils.version>
-    <common.version>0.1.0</common.version>
+    <error-utils.version>0.2.0</error-utils.version>
+    <common.version>0.2.0</common.version>
+    <json-utils.version>0.2.0</json-utils.version>
+    <log-utils.version>0.2.0</log-utils.version>
   </properties>
 
   <distributionManagement>
@@ -84,7 +95,7 @@
   <repositories>
     <repository>
       <id>nexus</id>
-      <url>http://www.oliverw.dns-dynamic.net8081/repository/maven-public</url>
+      <url>http://www.oliverw.dns-dynamic.net:8081/repository/maven-public</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -136,6 +147,16 @@
         <artifactId>common</artifactId>
         <version>${common.version}</version>
       </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>json-utils</artifactId>
+        <version>${json-utils.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>log-utils</artifactId>
+        <version>${log-utils.version}</version>
+      </dependency>
 
       <!-- Spring Dependencies -->
       <dependency>
@@ -152,6 +173,28 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter</artifactId>
         <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-logging</artifactId>
+        <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security.oauth</groupId>
+        <artifactId>spring-security-oauth2</artifactId>
+        <version>${spring-oauth2.version}</version>
       </dependency>
 
       <!-- Jackson -->
@@ -188,6 +231,20 @@
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-api</artifactId>
         <version>${opentelementry.version}</version>
+      </dependency>
+
+      <!-- Utils -->
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons-io.version}</version>
+      </dependency>
+
+      <!-- JWT -->
+      <dependency>
+        <groupId>com.nimbusds</groupId>
+        <artifactId>nimbus-jose-jwt</artifactId>
+        <version>${nimbus-jwt.version}</version>
       </dependency>
 
       <!-- log4j -->

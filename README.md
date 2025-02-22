@@ -26,6 +26,10 @@ Aggregates Jacoco reports from all modules.
 
 Utility functions for working with JSON data in lllIIIIlll applications.
 
+### Log Utils Module
+
+Lightweight logging utility library focused on providing standardized logging functionality and distributed tracing capabilities across lllIIIIlll applications.
+
 ## Documentation
 
 For detailed documentation of each module, please refer to the respective module directories.
@@ -38,7 +42,7 @@ To include any module from this shared library in your project:
 <dependency>
     <groupId>net.ow.shared</groupId>
     <artifactId>module-name</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 
@@ -72,6 +76,7 @@ shared-lib/
 ├── error-utils/
 ├── jacoco-aggregator/
 ├── json-utils/
+├── log-utils/
 ```
 
 ### Branch Strategy
@@ -111,6 +116,3 @@ Open this project in your favorite terminal.
 
 ##### Build specific module
 `mvn clean install -pl <module-name>`
-
-### Publishing
-New versions are automatically published to Nexus upon merge to main branch.

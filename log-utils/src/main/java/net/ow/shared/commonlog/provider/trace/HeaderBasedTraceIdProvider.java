@@ -2,6 +2,7 @@ package net.ow.shared.commonlog.provider.trace;
 
 import io.micrometer.common.lang.NonNullApi;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Setter
 @NonNullApi
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderBasedTraceIdProvider implements TraceIdProvider {
     public static final TraceIdProvider DEFAULT_FALLBACK_PROVIDER = new DefaultTraceIdProvider();
 

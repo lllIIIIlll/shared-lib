@@ -13,7 +13,11 @@ public class DateInstantDeserializer extends JsonDeserializer<Instant> {
     @Override
     public Instant deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, DateTimeParseException {
-        LocalDate date = LocalDate.parse(jsonParser.getText());
-        return date.atStartOfDay(ZoneOffset.UTC).toInstant();
+        String text = jsonParser.getText();
+        if (null == text || text.isBlank()) {
+            return null;
+        }
+
+        return LocalDate.parse(text).atStartOfDay(ZoneOffset.UTC).toInstant();
     }
 }

@@ -1,12 +1,14 @@
 package net.ow.shared.commonlog.filter;
 
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
+
 import io.micrometer.common.lang.NonNullApi;
 import io.micrometer.core.instrument.util.IOUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 import net.ow.shared.common.servlet.CachedHttpServletRequestWrapper;
 import net.ow.shared.commonlog.provider.client.information.ClientInformationProvider;
@@ -15,13 +17,14 @@ import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.slf4j.event.Level;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
+@Getter
 @Setter
-@Order(2)
 @NonNullApi
-@NoArgsConstructor
+@Order(LOWEST_PRECEDENCE - 1)
 public class RequestInformationRequestLoggingFilter extends AbstractRequestLoggingFilter {
     private static Logger log =
             LoggerFactory.getLogger(RequestInformationRequestLoggingFilter.class);
@@ -31,12 +34,28 @@ public class RequestInformationRequestLoggingFilter extends AbstractRequestLoggi
     public static final ClientInformationProvider DEFAULT_CLIENT_INFORMATION_PROVIDER =
             new DefaultClientInformationProvider();
 
+    public static final Level DEFAULT_LOG_LEVEL = Level.INFO;
+
     private ClientInformationProvider clientInformationProvider;
+
+    private Level logLevel;
+
+    public RequestInformationRequestLoggingFilter() {
+        this.clientInformationProvider = DEFAULT_CLIENT_INFORMATION_PROVIDER;
+        this.logLevel = DEFAULT_LOG_LEVEL;
+    }
 
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
-        log.info("Request Received: {}", getRequestInformation(request));
         MDC.put(REQUEST_TIMESTAMP_KEY, String.valueOf(Clock.systemUTC().millis()));
+
+        try {
+            request = new CachedHttpServletRequestWrapper(request);
+        } catch (IOException e) {
+            log.warn("Failed to cache request.  Error - {}", e.getMessage());
+        }
+
+        log.atLevel(logLevel).log("Request Received: {}", getRequestInformation(request));
     }
 
     @Override
@@ -47,7 +66,7 @@ public class RequestInformationRequestLoggingFilter extends AbstractRequestLoggi
         long requestEndTime = Clock.systemUTC().millis();
         long duration = requestEndTime - requestTimestamp;
 
-        log.info("Request processed within {}ms", duration);
+        log.atLevel(logLevel).log("Request processed within {}ms", duration);
     }
 
     private String getRequestInformation(HttpServletRequest request) {
@@ -105,12 +124,7 @@ public class RequestInformationRequestLoggingFilter extends AbstractRequestLoggi
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
-            CachedHttpServletRequestWrapper cachedHttpServletRequestWrapper =
-                    new CachedHttpServletRequestWrapper(request);
-            String requestBody =
-                    IOUtils.toString(
-                            cachedHttpServletRequestWrapper.getInputStream(),
-                            StandardCharsets.UTF_8);
+            String requestBody = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
             if (!requestBody.isEmpty()) {
                 stringBuilder.append("[Request Body]\n").append(requestBody);
             }

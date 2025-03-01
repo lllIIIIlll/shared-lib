@@ -30,4 +30,8 @@ public class JWTUtils {
 
         return type.cast(claim);
     }
+
+    public static JWTClaimsSet getClaimsSet(@NonNull String jwt) throws ParseException {
+        return JWTParser.parse(jwt).getJWTClaimsSet();
+    }
 }

@@ -1,5 +1,7 @@
 package net.ow.shared.commonlog.filter;
 
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
+
 import io.micrometer.common.lang.NonNullApi;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Setter;
@@ -10,8 +12,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 @Setter
-@Order(1)
 @NonNullApi
+@Order(LOWEST_PRECEDENCE - 2)
 public class TraceIdRequestLoggingFilter extends AbstractRequestLoggingFilter {
     public static final TraceIdProvider TRACE_ID_PROVIDER = new DefaultTraceIdProvider();
 

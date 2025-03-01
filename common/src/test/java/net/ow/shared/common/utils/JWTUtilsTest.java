@@ -22,7 +22,10 @@ class JWTUtilsTest {
         mockedJWTParser = mockStatic(JWTParser.class);
 
         JWT jwt = mock(JWT.class);
-        when(JWTParser.parse(anyString())).thenReturn(jwt);
+        when(JWTParser.parse("valid.jwt.token")).thenReturn(jwt);
+        when(JWTParser.parse("invalid.jwt.token")).thenThrow(ParseException.class);
+        when(JWTParser.parse("")).thenCallRealMethod();
+        when(JWTParser.parse(null)).thenCallRealMethod();
 
         JWTClaimsSet claimsSet = mock(JWTClaimsSet.class);
         when(jwt.getJWTClaimsSet()).thenReturn(claimsSet);
@@ -60,16 +63,9 @@ class JWTUtilsTest {
 
     @Test
     void getClaimTest_whenInvalidJWT_thenThrowsParseException() {
-        mockedJWTParser
-                .when(() -> JWTParser.parse("invalid.jwt.token"))
-                .thenThrow(ParseException.class);
-
         String invalidJwt = "invalid.jwt.token";
         assertThrows(
-                ParseException.class,
-                () -> {
-                    JWTUtils.getClaim(invalidJwt, "name", String.class);
-                });
+                ParseException.class, () -> JWTUtils.getClaim(invalidJwt, "name", String.class));
     }
 
     @Test
@@ -77,8 +73,31 @@ class JWTUtilsTest {
     void getClaimTest_whenTypeMismatch_thenThrowsClassCastException() {
         assertThrows(
                 ClassCastException.class,
-                () -> {
-                    JWTUtils.getClaim("valid.jwt.token", "name", Integer.class);
-                });
+                () -> JWTUtils.getClaim("valid.jwt.token", "name", Integer.class));
+    }
+
+    @Test
+    @SneakyThrows
+    void getClaimsSetTest_OK() {
+        JWTClaimsSet claimsSet = JWTUtils.getClaimsSet("valid.jwt.token");
+        assertNotNull(claimsSet);
+        assertEquals("John Doe", claimsSet.getClaim("name"));
+    }
+
+    @Test
+    void getClaimsSetTest_whenInvalidJWT_thenThrowsParseException() {
+        assertThrows(ParseException.class, () -> JWTUtils.getClaimsSet("invalid.jwt.token"));
+    }
+
+    @Test
+    @SneakyThrows
+    void getClaimsSet_whenEmptyJWT_thenThrowsParseException() {
+        assertThrows(ParseException.class, () -> JWTUtils.getClaimsSet(""));
+    }
+
+    @Test
+    @SuppressWarnings("all")
+    void getClaimsSet_NullJWT_ThrowsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> JWTUtils.getClaimsSet(null));
     }
 }

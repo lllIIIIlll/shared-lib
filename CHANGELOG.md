@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.2] - 2025-03-01
+
+### Fixed
+- Fixed null handling in DateInstantDeserializer
+  - Enhanced deserializer to gracefully handle null input values
+  - Improved robustness of date-time parsing logic
+
 ## [0.2.1] - 2025-03-01
 
 ### Added

@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
-
 ## [0.2.1] - 2025-03-01
 
 ### Added
 - Enhanced JWT claims extraction functionality in json-utils module
+  - Improved type-safe claim extraction with better null-safety handling
+  - Added support for custom claim types and validation
 - Added request logging with trace ID support in log-utils module
+  - Implemented thread-safe trace ID context management
+  - Enhanced request information logging with customizable client info
 
 ## [0.2.0] - 2025-02-22
 

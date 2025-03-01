@@ -1,7 +1,6 @@
 package net.ow.shared.jsonutils.deserializer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -45,6 +44,22 @@ class DateInstantDeserializerTest {
         Instant expectResult = SIMPLE_DATE_FORMAT.parse(date).toInstant();
 
         assertEquals(expectResult, actualResult);
+    }
+
+    @Test
+    @SneakyThrows
+    void deserializeTest_whenNullText_thenReturnsNull() {
+        when(jsonParser.getText()).thenReturn(null);
+
+        assertNull(dateInstantDeserializer.deserialize(jsonParser, deserializationContext));
+    }
+
+    @Test
+    @SneakyThrows
+    void deserializeTest_whenBlankText_thenReturnsNull() {
+        when(jsonParser.getText()).thenReturn("   ");
+
+        assertNull(dateInstantDeserializer.deserialize(jsonParser, deserializationContext));
     }
 
     @Test

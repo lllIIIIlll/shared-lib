@@ -111,4 +111,14 @@ class JWTClientInformationProviderTest {
 
         assertEquals("", result);
     }
+
+    @Test
+    void getClientInformationTest_whenAuthorizationHeaderEmpty_thenReturnsEmptyString() {
+        jwtClientInformationProvider.setClaimKeys(Collections.singleton("sub"));
+        when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("");
+
+        String result = jwtClientInformationProvider.getClientInformation(httpServletRequest);
+
+        assertEquals("", result);
+    }
 }

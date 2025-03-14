@@ -32,7 +32,12 @@ public class JWTClientInformationProvider implements ClientInformationProvider {
 
         JWTClaimsSet claims;
         try {
-            String jwt = request.getHeader(HttpHeaders.AUTHORIZATION).replace(BEARER, "");
+            String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (null == jwt || jwt.isBlank()) {
+                return Strings.EMPTY;
+            }
+            jwt = jwt.replace(BEARER, "");
+
             claims = JWTUtils.getClaimsSet(jwt);
         } catch (ParseException e) {
             log.error("Fail to parse JWT with error  - {}", e.getMessage());

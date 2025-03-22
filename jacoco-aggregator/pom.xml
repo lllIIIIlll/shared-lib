@@ -28,6 +28,10 @@
             <groupId>net.ow.shared</groupId>
             <artifactId>log-utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.ow.shared</groupId>
+            <artifactId>server-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

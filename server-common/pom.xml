@@ -9,7 +9,7 @@
         <version>0.3.1</version>
     </parent>
 
-    <artifactId>log-utils</artifactId>
+    <artifactId>server-common</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,38 +18,16 @@
     </properties>
 
     <dependencies>
-        <!-- Modules -->
-        <dependency>
-            <groupId>net.ow.shared</groupId>
-            <artifactId>server-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.ow.shared</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-
-        <!-- Micrometer -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-core</artifactId>
-            <version>${micrometer-core.version}</version>
-        </dependency>
-
-        <!-- Validation -->
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-
         <!-- Spring Dependencies -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
 
         <!-- tests -->
         <dependency>
@@ -74,4 +52,12 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

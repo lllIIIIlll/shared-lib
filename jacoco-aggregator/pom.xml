@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.ow.shared</groupId>
         <artifactId>shared-lib</artifactId>
-        <version>0.2.3</version>
+        <version>0.3.1</version>
     </parent>
 
     <artifactId>jacoco-aggregator</artifactId>
@@ -27,6 +27,10 @@
         <dependency>
             <groupId>net.ow.shared</groupId>
             <artifactId>log-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.ow.shared</groupId>
+            <artifactId>server-common</artifactId>
         </dependency>
     </dependencies>
 

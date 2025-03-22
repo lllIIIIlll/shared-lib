@@ -7,7 +7,7 @@
   <groupId>net.ow.shared</groupId>
   <artifactId>shared-lib</artifactId>
   <name>Shared Lib</name>
-  <version>0.2.3</version>
+  <version>0.3.1</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -16,6 +16,7 @@
     <module>common</module>
     <module>json-utils</module>
     <module>log-utils</module>
+    <module>server-common</module>
   </modules>
 
   <properties>
@@ -75,10 +76,11 @@
     <jacoco.minimum-rate>0.80</jacoco.minimum-rate>
 
     <!-- Modules -->
-    <error-utils.version>0.2.3</error-utils.version>
-    <common.version>0.2.3</common.version>
-    <json-utils.version>0.2.3</json-utils.version>
-    <log-utils.version>0.2.3</log-utils.version>
+    <error-utils.version>0.3.1</error-utils.version>
+    <common.version>0.3.1</common.version>
+    <json-utils.version>0.3.1</json-utils.version>
+    <log-utils.version>0.3.1</log-utils.version>
+    <server-common.version>0.3.1</server-common.version>
   </properties>
 
   <distributionManagement>
@@ -157,6 +159,11 @@
         <artifactId>log-utils</artifactId>
         <version>${log-utils.version}</version>
       </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>server-common</artifactId>
+        <version>${server-common.version}</version>
+      </dependency>
 
       <!-- Spring Dependencies -->
       <dependency>
@@ -220,6 +227,8 @@
         <artifactId>javax.servlet-api</artifactId>
         <version>${javax.servlet.version}</version>
       </dependency>
+
+      <!-- Micrometer -->
       <dependency>
         <groupId>io.micrometer</groupId>
         <artifactId>micrometer-core</artifactId>

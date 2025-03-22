@@ -1,4 +1,4 @@
-package net.ow.shared.common.servlet;
+package net.ow.shared.common.server.servlet;
 
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;

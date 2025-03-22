@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.1] - 2025-03-22
+
+### Added
+- Implemented QueryMapEncoder in server-common module
+  - Added support for converting field names to expected parameter names in HTTP requests
+  - Created QueryParameter annotation for custom parameter naming in Feign clients
+
+### Changed
+- Moved CachedHttpServletRequestWrapper from common module to server-common module
+  - Improved organization of server-related components
+  - Enhanced maintainability by grouping related functionality
+
 ## [0.2.3] - 2025-03-05
 
 ### Fixed

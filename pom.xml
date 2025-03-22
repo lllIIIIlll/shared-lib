@@ -16,6 +16,7 @@
     <module>common</module>
     <module>json-utils</module>
     <module>log-utils</module>
+    <module>server-common</module>
   </modules>
 
   <properties>
@@ -79,6 +80,7 @@
     <common.version>0.2.4-SNAPSHOT</common.version>
     <json-utils.version>0.2.4-SNAPSHOT</json-utils.version>
     <log-utils.version>0.2.4-SNAPSHOT</log-utils.version>
+    <server-common.version>0.2.4-SNAPSHOT</server-common.version>
   </properties>
 
   <distributionManagement>
@@ -156,6 +158,11 @@
         <groupId>net.ow.shared</groupId>
         <artifactId>log-utils</artifactId>
         <version>${log-utils.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.ow.shared</groupId>
+        <artifactId>server-common</artifactId>
+        <version>${server-common.version}</version>
       </dependency>
 
       <!-- Spring Dependencies -->

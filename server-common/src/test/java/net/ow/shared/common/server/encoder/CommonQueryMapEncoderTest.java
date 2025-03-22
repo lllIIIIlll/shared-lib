@@ -5,16 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 import lombok.Data;
 import net.ow.shared.common.server.annotation.QueryParameter;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CommonQueryMapEncoderTest {
-    private CommonQueryMapEncoder encoder;
-
-    @BeforeEach
-    public void setUp() {
-        encoder = new CommonQueryMapEncoder();
-    }
+    private final CommonQueryMapEncoder encoder = new CommonQueryMapEncoder();
 
     @Test
     void encodeTest_whenFieldWithQueryNameAnnotation_thenUsesAnnotationValueAsParameterName() {

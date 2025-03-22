@@ -30,6 +30,10 @@ Utility functions for working with JSON data in lllIIIIlll applications.
 
 Lightweight logging utility library focused on providing standardized logging functionality and distributed tracing capabilities across lllIIIIlll applications.
 
+### Server Common Module
+
+Server-side utilities and shared components for lllIIIIlll applications, including HTTP request wrappers and Feign client utilities.
+
 ## Documentation
 
 For detailed documentation of each module, please refer to the respective module directories.
@@ -77,6 +81,7 @@ shared-lib/
 ├── jacoco-aggregator/
 ├── json-utils/
 ├── log-utils/
+├── server-common/
 ```
 
 ### Branch Strategy

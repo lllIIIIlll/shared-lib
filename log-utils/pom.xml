@@ -21,8 +21,18 @@
         <!-- Modules -->
         <dependency>
             <groupId>net.ow.shared</groupId>
+            <artifactId>server-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.ow.shared</groupId>
             <artifactId>common</artifactId>
-            <version>${common.version}</version>
+        </dependency>
+
+        <!-- Micrometer -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <version>${micrometer-core.version}</version>
         </dependency>
 
         <!-- Validation -->

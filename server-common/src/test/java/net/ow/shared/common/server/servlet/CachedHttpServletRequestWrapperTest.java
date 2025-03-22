@@ -1,4 +1,4 @@
-package net.ow.shared.common.servlet;
+package net.ow.shared.common.server.servlet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;

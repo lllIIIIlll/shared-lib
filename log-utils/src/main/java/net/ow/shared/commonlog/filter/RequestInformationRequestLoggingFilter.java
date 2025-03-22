@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import lombok.Getter;
 import lombok.Setter;
-import net.ow.shared.common.servlet.CachedHttpServletRequestWrapper;
+import net.ow.shared.common.server.servlet.CachedHttpServletRequestWrapper;
 import net.ow.shared.commonlog.provider.client.information.ClientInformationProvider;
 import net.ow.shared.commonlog.provider.client.information.DefaultClientInformationProvider;
 import org.apache.logging.log4j.util.Strings;
